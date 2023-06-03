@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Dungeon Crawl",
+    "Combat Encounter Trivial": 2,
+    "Combat Encounter Low": 4,
+    "Combat Encounter Moderate": 6,
+    "Combat Encounter Severe": 6,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Gritty Adventure",
+    "Combat Encounter Trivial": 2,
+    "Combat Encounter Low": 4,
+    "Combat Encounter Moderate": 7,
+    "Combat Encounter Severe": 8,
+    "Combat Encounter Extreme": 1
+  },  {
+    "name": "High Adventure",
+    "Combat Encounter Trivial": 0,
+    "Combat Encounter Low": 0,
+    "Combat Encounter Moderate": 16,
+    "Combat Encounter Severe": 8,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Horror",
+    "Combat Encounter Trivial": 0,
+    "Combat Encounter Low": 0,
+    "Combat Encounter Moderate": 2,
+    "Combat Encounter Severe": 1,
+    "Combat Encounter Extreme": 1
+  },  {
+    "name": "Intrigue",
+    "Combat Encounter Trivial": 2,
+    "Combat Encounter Low": 2,
+    "Combat Encounter Moderate": 4,
+    "Combat Encounter Severe": 1,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Military Adventure",
+    "Combat Encounter Trivial": 0,
+    "Combat Encounter Low": 4,
+    "Combat Encounter Moderate": 1,
+    "Combat Encounter Severe": 1,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Mystery",
+    "Combat Encounter Trivial": 2,
+    "Combat Encounter Low": 4,
+    "Combat Encounter Moderate": 6,
+    "Combat Encounter Severe": 6,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Planar Adventure",
+    "Combat Encounter Trivial": 0,
+    "Combat Encounter Low": 0,
+    "Combat Encounter Moderate": 12,
+    "Combat Encounter Severe": 12,
+    "Combat Encounter Extreme": 0
+  },  {
+    "name": "Romantic Adventure",
+    "Combat Encounter Trivial": 0,
+    "Combat Encounter Low": 3,
+    "Combat Encounter Moderate": 6,
+    "Combat Encounter Severe": 3,
+    "Combat Encounter Extreme": 0
+  }
+]
