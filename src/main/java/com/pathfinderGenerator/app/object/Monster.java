@@ -15,6 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Monster {
+    @Override
+    public String toString() {
+        return "Monster{" +
+                "name='" + name + '\'' +
+                ", cr=" + cr +
+                ", trait=" + trait +
+                '}';
+    }
 
     private static List<String> TRAIT_LIST = Arrays.asList("Trait 1", "Trait 2", "Trait 3",
             "Trait 4", "Trait 5", "Trait 6", "Trait 7");

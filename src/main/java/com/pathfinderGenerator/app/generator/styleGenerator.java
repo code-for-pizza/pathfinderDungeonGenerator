@@ -1,14 +1,12 @@
 package com.pathfinderGenerator.app.generator;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.Style;
-import org.testng.annotations.Test;
 
 import java.io.*;
 import java.util.*;
@@ -272,165 +270,231 @@ public class styleGenerator {
 
     }
 
-    private Monster generateEncounter(String diff, int partySize, int partyLevel){
+    private List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits){
 
-        int diffConv = 0;
+        int difficultyXpMax = 0;
         int temp = 0;
         int currMax = 0;
+        List<Monster> finishedEncounter = new ArrayList<>();
+
         switch (diff) {
             case "Trivial":
                 temp = partySize-4;
-                diffConv = Integer.parseInt(xpChart[0][1]);
+                difficultyXpMax = Integer.parseInt(xpChart[0][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[0][2]);
-                    System.out.println("xpAdjustment = " + xpAdjustment);
-                    diffConv += xpAdjustment;
+//                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
                 break;
 
             case "Low":
                 temp = partySize-4;
-                diffConv = Integer.parseInt(xpChart[1][1]);
+                difficultyXpMax = Integer.parseInt(xpChart[1][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[1][2]);
-                    System.out.println("xpAdjustment = " + xpAdjustment);
-                    diffConv += xpAdjustment;
+//                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
                 break;
             case "Moderate":
                 temp = partySize-4;
-                diffConv = Integer.parseInt(xpChart[2][1]);
+                difficultyXpMax = Integer.parseInt(xpChart[2][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[2][2]);
-                    System.out.println("xpAdjustment = " + xpAdjustment);
-                    diffConv += xpAdjustment;
+//                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
                 break;
             case "Severe":
                 temp = partySize-4;
-                diffConv = Integer.parseInt(xpChart[3][1]);
+                difficultyXpMax = Integer.parseInt(xpChart[3][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[3][2]);
-                    System.out.println("xpAdjustment = " + xpAdjustment);
-                    diffConv += xpAdjustment;
+//                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
                 break;
             case "Extreme":
                 temp = partySize-4;
-                diffConv = Integer.parseInt(xpChart[4][1]);
+                difficultyXpMax = Integer.parseInt(xpChart[4][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[4][2]);
-                    System.out.println("xpAdjustment = " + xpAdjustment);
-                    diffConv += xpAdjustment;
+//                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
                 break;
         }
 
-        System.out.println("diffConv = " + diffConv);
+        //this will determine the max difficulty for the max XP we are dealing with.
+        currMax = currentMax(difficultyXpMax);
 
-        /*
-        this is determined by the amount of players after the adjustments, so a moderate 80xp with only 2 players (40xp)
-        should only generate a creature of the party level (40xp) or lower.
-         */
-        if(diffConv<= 10){
-            currMax = 1;
-        } else if (diffConv <= 15){
-            currMax = 2;
-        } else if (diffConv <= 20){
-            currMax = 3;
-        } else if (diffConv <= 30){
-            currMax = 4;
-        } else if (diffConv <= 40){
-            currMax = 5;
-        } else if (diffConv <= 60){
-            currMax = 6;
-        } else if (diffConv <= 80){
-            currMax = 7;
-        } else if (diffConv <= 120){
-            currMax = 8;
-        } else if (diffConv <= 160){
-            currMax = 9;
+        int difficultyHold = difficultyXpMax;
+
+        System.out.println("difficultyHold = " + difficultyHold);
+
+        while(difficultyHold > 0){
+
+            /*
+            Okay we now have the absolute max we can roll for our set difficulty, which in this case is currMax
+            We will generate a number from hopefully 1 -> maxNumber can keep subtracting exp from the difficultyHold
+            until we are either just under the exp allowed, or until we are at 0
+             */
+
+            int rnd = (int) (Math.random() * (currMax + 1));
+
+            /*
+            We are going to generate a random monster from depending on the partylevel and the numebr generated by rnd
+            above. If the party level is 4, and rnd = 5, then 4 - 4 = 0 we get someone from the same level of the party.
+            party level 4 we get a 2 then we generate an enemy equal to party level + (-2)
+             */
+            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel+(createXP[rnd][0])).size()));
+            /*
+            We now retrieve that monster back and subtract the CRxp from our xp limit.
+             */
+            Monster monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
+
+
+            if(monster.getTrait().containsAll(traits)){
+
+                System.out.println("monster = " + monster.getName() + " traits = " + monster.getTrait());
+                difficultyHold -= createXP[rnd][1];
+                System.out.println("difficultyHold = " + difficultyHold);
+
+                finishedEncounter.add(monster);
+                currMax = currentMax(difficultyHold);
+            }
         }
 
-        int rnd = (int) (Math.random() * (currMax + 1));
-        rnd = 5;
-        System.out.println("rnd = " + rnd);
-
-        /*
-        This will generate how many creatures we are going to create so a party of 4 on a moderate encounter could generate anywhere between
-        1, 2, 3, 4,or 5, if it generates a 5 then just one creature of the same CR as the party, if it generates a 4, then 2 creature's 1 of cr -1, and another of cr -4 etc.
-         */
-        /*
-        In this case we are generating the simplest of encounters, 1 encounter at the CR of the party.
-         */
-        if(rnd == 4){
-
-        }
-        if(rnd == 5){
-            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel).size()));
-            System.out.println("monsterGuide = " + monsterGuide.get(partyLevel).size());
-            Monster monster = monsterGuide.get(partyLevel).get(creatureRandom);
-            System.out.println("monster = " + monster.getName());
-        }
-
-
-
-        return null;
+//        System.out.println("finishedEncounter = " + finishedEncounter);
+        return finishedEncounter;
     }
 
+    private int currentMax(int difficultyXpMax){
+        int currMax = 0;
+        if(difficultyXpMax<= 10){
+            currMax = 0;
+        } else if (difficultyXpMax <= 15){
+            currMax = 1;
+        } else if (difficultyXpMax <= 20){
+            currMax = 2;
+        } else if (difficultyXpMax <= 30){
+            currMax = 3;
+        } else if (difficultyXpMax <= 40){
+            currMax = 4;
+        } else if (difficultyXpMax <= 60){
+            currMax = 5;
+        } else if (difficultyXpMax <= 80){
+            currMax = 6;
+        } else if (difficultyXpMax <= 120){
+            currMax = 7;
+        } else if (difficultyXpMax <= 160){
+            currMax = 8;
+        }
+        return currMax;
+    }
 
-
-
-    public void styleGenerators(String style, int partySize, int partyLevel){
+    public void styleGenerators(String style, int partySize, int partyLevel, List<String>traits) throws JsonProcessingException {
 
         Style style1 = styleGuide.get(style);
         //okay lets retrieve the style guide
         System.out.println("Name "+style1.getName()+" Enounters "+style1.getTrivial()+", "+style1.getLow()+", "+style1.getModerate()+", "+style1.getSevere()+", "+style1.getExtreme());
         System.out.println("style = " + style + ", partySize = " + partySize + ", partyLevel = " + partyLevel);
 
-        List<Monster> encounters = null;
+        List<List<Monster>> encountersTrivial = new ArrayList<>();
+        List<List<Monster>> encountersLow = new ArrayList<>();
+        List<List<Monster>> encountersModerate = new ArrayList<>();
+        List<List<Monster>> encountersSevere = new ArrayList<>();
+        List<List<Monster>> encountersExtreme = new ArrayList<>();
 
         if(!style1.getTrivial().isEmpty()){
             System.out.println(style1.getTrivial());
             int inte = Integer.parseInt(style1.getTrivial());
 
             for(int i = 0; i < inte; i++){
-                Monster encounterInternal = generateEncounter("Trivial", partySize, partyLevel);
-//                encounters.add(encounterInternal);
+                List<Monster> encounterInternal = generateEncounter("Trivial", partySize, partyLevel, traits);
+                encountersTrivial.add(encounterInternal);
 
             }
 
         }
-//        if(style1.getLow().isEmpty()){
-//
-//            for(int i = 0; i < Integer.getInteger(style1.getLow()); i++){
-//                Monster encounterInternal = generateEncounter("Low", partySize, partyLevel);
-//                encounters.add(encounterInternal);
-//
-//            }
-//        }
-//        for(int i = 0; i < Integer.getInteger(style1.getModerate()); i++){
-//            Monster encounterInternal = generateEncounter("Moderate", partySize, partyLevel);
-//            encounters.add(encounterInternal);
-//
-//        }
-//        for(int i = 0; i < Integer.getInteger(style1.getSevere()); i++){
-//            Monster encounterInternal = generateEncounter("Severe", partySize, partyLevel);
-//            encounters.add(encounterInternal);
-//
-//        }
-//        for(int i = 0; i < Integer.getInteger(style1.getExtreme()); i++){
-//            Monster encounterInternal = generateEncounter("Extreme", partySize, partyLevel);
-//            encounters.add(encounterInternal);
-//
-//        }
+        if(!style1.getLow().isEmpty()){
+            System.out.println("style1 = " + style1.getLow());
+            int inte = Integer.parseInt(style1.getLow());
+            for(int i = 0; i < inte; i++){
+                List<Monster> encounterInternal = generateEncounter("Low", partySize, partyLevel, traits);
+                encountersLow.add(encounterInternal);
 
-//        System.out.println(monsterGuide.get(3));
+            }
+        }
+        if(!style1.getModerate().isEmpty()){
+            int inte = Integer.parseInt(style1.getModerate());
+            for(int i = 0; i < inte; i++){
+                List<Monster> encounterInternal = generateEncounter("Moderate", partySize, partyLevel, traits);
+                encountersModerate.add(encounterInternal);
+
+            }
+        }
+        if(!style1.getSevere().isEmpty()){
+            int inte = Integer.parseInt(style1.getSevere());
+            for(int i = 0; i < inte; i++){
+                List<Monster> encounterInternal = generateEncounter("Severe", partySize, partyLevel, traits);
+                encountersSevere.add(encounterInternal);
+
+            }
+        }
+        if(!style1.getExtreme().isEmpty()){
+            int inte = Integer.parseInt(style1.getExtreme());
+            for(int i = 0; i < inte; i++){
+                List<Monster> encounterInternal = generateEncounter("Extreme", partySize, partyLevel, traits);
+                encountersExtreme.add(encounterInternal);
+
+            }
+        }
+
+        String jsonTri = objectMapper.writeValueAsString(encountersTrivial);
+        System.out.println("Trivial - "+jsonTri);
+        String jsonLow = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersLow);
+        System.out.println("Low - "+jsonLow);
+        String jsonMod = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersModerate);
+        System.out.println("Moderate - "+jsonMod);
+        String jsonSev = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersSevere);
+        System.out.println("Severe - "+jsonSev);
+        String jsonExt = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersExtreme);
+        System.out.println("Extreme - "+jsonExt);
+
+        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
+
+        try {
+            writer.writeValue(new File("trivial.json"),encountersTrivial);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            writer.writeValue(new File("low.json"),encountersLow);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            writer.writeValue(new File("moderate.json"),encountersModerate);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            writer.writeValue(new File("severe.json"),encountersSevere);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            writer.writeValue(new File("extreme.json"),encountersExtreme);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }

@@ -12,6 +12,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Style {
 
+    @Override
+    public String toString() {
+        return "Style{" +
+                "name='" + name + '\'' +
+                ", trivial='" + trivial + '\'' +
+                ", low='" + low + '\'' +
+                ", moderate='" + moderate + '\'' +
+                ", severe='" + severe + '\'' +
+                ", extreme='" + extreme + '\'' +
+                '}';
+    }
+
     private String name;
 
     @JsonSetter("Combat Encounter Trivial")
