@@ -276,6 +276,7 @@ public class styleGenerator {
 
         int diffConv = 0;
         int temp = 0;
+        int currMax = 0;
         switch (diff) {
             case "Trivial":
                 temp = partySize-4;
@@ -331,6 +332,51 @@ public class styleGenerator {
         }
 
         System.out.println("diffConv = " + diffConv);
+
+        /*
+        this is determined by the amount of players after the adjustments, so a moderate 80xp with only 2 players (40xp)
+        should only generate a creature of the party level (40xp) or lower.
+         */
+        if(diffConv<= 10){
+            currMax = 1;
+        } else if (diffConv <= 15){
+            currMax = 2;
+        } else if (diffConv <= 20){
+            currMax = 3;
+        } else if (diffConv <= 30){
+            currMax = 4;
+        } else if (diffConv <= 40){
+            currMax = 5;
+        } else if (diffConv <= 60){
+            currMax = 6;
+        } else if (diffConv <= 80){
+            currMax = 7;
+        } else if (diffConv <= 120){
+            currMax = 8;
+        } else if (diffConv <= 160){
+            currMax = 9;
+        }
+
+        int rnd = (int) (Math.random() * (currMax + 1));
+        rnd = 5;
+        System.out.println("rnd = " + rnd);
+
+        /*
+        This will generate how many creatures we are going to create so a party of 4 on a moderate encounter could generate anywhere between
+        1, 2, 3, 4,or 5, if it generates a 5 then just one creature of the same CR as the party, if it generates a 4, then 2 creature's 1 of cr -1, and another of cr -4 etc.
+         */
+        /*
+        In this case we are generating the simplest of encounters, 1 encounter at the CR of the party.
+         */
+        if(rnd == 4){
+
+        }
+        if(rnd == 5){
+            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel).size()));
+            System.out.println("monsterGuide = " + monsterGuide.get(partyLevel).size());
+            Monster monster = monsterGuide.get(partyLevel).get(creatureRandom);
+            System.out.println("monster = " + monster.getName());
+        }
 
 
 
