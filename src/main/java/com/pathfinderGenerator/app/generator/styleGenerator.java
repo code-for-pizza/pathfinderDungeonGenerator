@@ -20,6 +20,9 @@ public class styleGenerator {
     static Map<Integer, List<Monster>> monsterGuide = new styleGenerator().instance();
     static Map<String, Style> styleGuide = new styleGenerator().instance2();
 
+    static String[][] xpChart = {{"Trivial", "40","10"}, {"Low", "60", "15"}, {"Moderate","80","20"}, {"Severe", "120","30"}, {"Extreme","160","40"}};
+
+    static int[][] createXP = {{-4,10}, {-3,15}, {-2,20}, {-1,30}, {0,40}, {1,60}, {2,80}, {3,120}, {4,160}};
     private Style readStyle(JsonParser jsonParser) throws IOException {
         Style style = new Style();
         List<String> traitList = new ArrayList<>();
@@ -269,7 +272,67 @@ public class styleGenerator {
 
     }
 
-    private List<Monster> generateEncounter(int xp){
+    private Monster generateEncounter(String diff, int partySize, int partyLevel){
+
+        int diffConv = 0;
+        int temp = 0;
+        switch (diff) {
+            case "Trivial":
+                temp = partySize-4;
+                diffConv = Integer.parseInt(xpChart[0][1]);
+                if(temp != 0){
+                    int xpAdjustment = temp * Integer.parseInt(xpChart[0][2]);
+                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    diffConv += xpAdjustment;
+                }
+                temp = 0;
+                break;
+
+            case "Low":
+                temp = partySize-4;
+                diffConv = Integer.parseInt(xpChart[1][1]);
+                if(temp != 0){
+                    int xpAdjustment = temp * Integer.parseInt(xpChart[1][2]);
+                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    diffConv += xpAdjustment;
+                }
+                temp = 0;
+                break;
+            case "Moderate":
+                temp = partySize-4;
+                diffConv = Integer.parseInt(xpChart[2][1]);
+                if(temp != 0){
+                    int xpAdjustment = temp * Integer.parseInt(xpChart[2][2]);
+                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    diffConv += xpAdjustment;
+                }
+                temp = 0;
+                break;
+            case "Severe":
+                temp = partySize-4;
+                diffConv = Integer.parseInt(xpChart[3][1]);
+                if(temp != 0){
+                    int xpAdjustment = temp * Integer.parseInt(xpChart[3][2]);
+                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    diffConv += xpAdjustment;
+                }
+                temp = 0;
+                break;
+            case "Extreme":
+                temp = partySize-4;
+                diffConv = Integer.parseInt(xpChart[4][1]);
+                if(temp != 0){
+                    int xpAdjustment = temp * Integer.parseInt(xpChart[4][2]);
+                    System.out.println("xpAdjustment = " + xpAdjustment);
+                    diffConv += xpAdjustment;
+                }
+                temp = 0;
+                break;
+        }
+
+        System.out.println("diffConv = " + diffConv);
+
+
 
         return null;
     }
@@ -284,21 +347,42 @@ public class styleGenerator {
         System.out.println("Name "+style1.getName()+" Enounters "+style1.getTrivial()+", "+style1.getLow()+", "+style1.getModerate()+", "+style1.getSevere()+", "+style1.getExtreme());
         System.out.println("style = " + style + ", partySize = " + partySize + ", partyLevel = " + partyLevel);
 
-        for(int i = 0; i < Integer.getInteger(style1.getTrivial()); i++){
+        List<Monster> encounters = null;
+
+        if(!style1.getTrivial().isEmpty()){
+            System.out.println(style1.getTrivial());
+            int inte = Integer.parseInt(style1.getTrivial());
+
+            for(int i = 0; i < inte; i++){
+                Monster encounterInternal = generateEncounter("Trivial", partySize, partyLevel);
+//                encounters.add(encounterInternal);
+
+            }
 
         }
-        for(int i = 0; i < Integer.getInteger(style1.getLow()); i++){
-
-        }
-        for(int i = 0; i < Integer.getInteger(style1.getModerate()); i++){
-
-        }
-        for(int i = 0; i < Integer.getInteger(style1.getSevere()); i++){
-
-        }
-        for(int i = 0; i < Integer.getInteger(style1.getExtreme()); i++){
-
-        }
+//        if(style1.getLow().isEmpty()){
+//
+//            for(int i = 0; i < Integer.getInteger(style1.getLow()); i++){
+//                Monster encounterInternal = generateEncounter("Low", partySize, partyLevel);
+//                encounters.add(encounterInternal);
+//
+//            }
+//        }
+//        for(int i = 0; i < Integer.getInteger(style1.getModerate()); i++){
+//            Monster encounterInternal = generateEncounter("Moderate", partySize, partyLevel);
+//            encounters.add(encounterInternal);
+//
+//        }
+//        for(int i = 0; i < Integer.getInteger(style1.getSevere()); i++){
+//            Monster encounterInternal = generateEncounter("Severe", partySize, partyLevel);
+//            encounters.add(encounterInternal);
+//
+//        }
+//        for(int i = 0; i < Integer.getInteger(style1.getExtreme()); i++){
+//            Monster encounterInternal = generateEncounter("Extreme", partySize, partyLevel);
+//            encounters.add(encounterInternal);
+//
+//        }
 
 //        System.out.println(monsterGuide.get(3));
 

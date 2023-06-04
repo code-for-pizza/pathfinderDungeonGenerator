@@ -7,6 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
         styleGenerator styleGenerator = new styleGenerator();
-        styleGenerator.styleGenerators("Horror", 4, 3);
+        styleGenerator.styleGenerators("Dungeon Crawl", 4, 3);
     }
 }
