@@ -114,7 +114,6 @@ public class styleGenerator {
 
         return monster;
     }
-
     private Map<Integer,List<Monster>> instance(){
         try{
             File file = new File ("src/main/java/com/pathfinderGenerator/app/database/monsterDB.json");
@@ -336,7 +335,7 @@ public class styleGenerator {
 
         int difficultyHold = difficultyXpMax;
 
-        System.out.println("difficultyHold = " + difficultyHold);
+//        System.out.println("difficultyHold = " + difficultyHold);
 
         while(difficultyHold > 0){
 
@@ -360,7 +359,7 @@ public class styleGenerator {
             Monster monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
 
 
-            if(monster.getTrait().containsAll(traits)){
+            if(monster.getTrait().stream().anyMatch(traits::contains)){
 
                 System.out.println("monster = " + monster.getName() + " traits = " + monster.getTrait());
                 difficultyHold -= createXP[rnd][1];
@@ -371,7 +370,6 @@ public class styleGenerator {
             }
         }
 
-//        System.out.println("finishedEncounter = " + finishedEncounter);
         return finishedEncounter;
     }
 
@@ -402,9 +400,6 @@ public class styleGenerator {
     public void styleGenerators(String style, int partySize, int partyLevel, List<String>traits) throws JsonProcessingException {
 
         Style style1 = styleGuide.get(style);
-        //okay lets retrieve the style guide
-        System.out.println("Name "+style1.getName()+" Enounters "+style1.getTrivial()+", "+style1.getLow()+", "+style1.getModerate()+", "+style1.getSevere()+", "+style1.getExtreme());
-        System.out.println("style = " + style + ", partySize = " + partySize + ", partyLevel = " + partyLevel);
 
         List<List<Monster>> encountersTrivial = new ArrayList<>();
         List<List<Monster>> encountersLow = new ArrayList<>();
@@ -424,7 +419,6 @@ public class styleGenerator {
 
         }
         if(!style1.getLow().isEmpty()){
-            System.out.println("style1 = " + style1.getLow());
             int inte = Integer.parseInt(style1.getLow());
             for(int i = 0; i < inte; i++){
                 List<Monster> encounterInternal = generateEncounter("Low", partySize, partyLevel, traits);
@@ -495,7 +489,6 @@ public class styleGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }

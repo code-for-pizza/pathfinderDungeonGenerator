@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) throws JsonProcessingException {
         List<String> traits = new ArrayList<>();
         traits.add("Undead");
+//        traits.add("Humanoid");
 //        traits.add("Animal");
         styleGenerator styleGenerator = new styleGenerator();
         styleGenerator.styleGenerators("Dungeon Crawl", 4, 3, traits);
