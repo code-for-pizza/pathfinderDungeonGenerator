@@ -33,4 +33,6 @@ public class Monster {
     @JsonSetter("Trait")
     private List<String> trait;
 
+    private String difficulty;
+
 }

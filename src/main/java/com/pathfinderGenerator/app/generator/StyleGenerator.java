@@ -7,17 +7,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.Style;
+import com.pathfinderGenerator.app.object.StyleRequest;
 
 import java.io.*;
 import java.util.*;
 
-public class styleGenerator {
+public class StyleGenerator {
 
     static ObjectMapper objectMapper = new ObjectMapper();
-
-    static Map<Integer, List<Monster>> monsterGuide = new styleGenerator().instance();
-    static Map<String, Style> styleGuide = new styleGenerator().instance2();
-
+    static Map<Integer, List<Monster>> monsterGuide = new StyleGenerator().instance();
+    static Map<String, Style> styleGuide = new StyleGenerator().instance2();
     static String[][] xpChart = {{"Trivial", "40","10"}, {"Low", "60", "15"}, {"Moderate","80","20"}, {"Severe", "120","30"}, {"Extreme","160","40"}};
 
     static int[][] createXP = {{-4,10}, {-3,15}, {-2,20}, {-1,30}, {0,40}, {1,60}, {2,80}, {3,120}, {4,160}};
@@ -282,7 +281,6 @@ public class styleGenerator {
                 difficultyXpMax = Integer.parseInt(xpChart[0][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[0][2]);
-//                    System.out.println("xpAdjustment = " + xpAdjustment);
                     difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
@@ -293,7 +291,6 @@ public class styleGenerator {
                 difficultyXpMax = Integer.parseInt(xpChart[1][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[1][2]);
-//                    System.out.println("xpAdjustment = " + xpAdjustment);
                     difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
@@ -303,7 +300,6 @@ public class styleGenerator {
                 difficultyXpMax = Integer.parseInt(xpChart[2][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[2][2]);
-//                    System.out.println("xpAdjustment = " + xpAdjustment);
                     difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
@@ -313,7 +309,6 @@ public class styleGenerator {
                 difficultyXpMax = Integer.parseInt(xpChart[3][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[3][2]);
-//                    System.out.println("xpAdjustment = " + xpAdjustment);
                     difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
@@ -323,7 +318,6 @@ public class styleGenerator {
                 difficultyXpMax = Integer.parseInt(xpChart[4][1]);
                 if(temp != 0){
                     int xpAdjustment = temp * Integer.parseInt(xpChart[4][2]);
-//                    System.out.println("xpAdjustment = " + xpAdjustment);
                     difficultyXpMax += xpAdjustment;
                 }
                 temp = 0;
@@ -332,11 +326,7 @@ public class styleGenerator {
 
         //this will determine the max difficulty for the max XP we are dealing with.
         currMax = currentMax(difficultyXpMax);
-
         int difficultyHold = difficultyXpMax;
-
-//        System.out.println("difficultyHold = " + difficultyHold);
-
         while(difficultyHold > 0){
 
             /*
@@ -360,11 +350,9 @@ public class styleGenerator {
 
 
             if(monster.getTrait().stream().anyMatch(traits::contains)){
-
-                System.out.println("monster = " + monster.getName() + " traits = " + monster.getTrait());
                 difficultyHold -= createXP[rnd][1];
-                System.out.println("difficultyHold = " + difficultyHold);
 
+                monster.setDifficulty(diff);
                 finishedEncounter.add(monster);
                 currMax = currentMax(difficultyHold);
             }
@@ -397,9 +385,9 @@ public class styleGenerator {
         return currMax;
     }
 
-    public void styleGenerators(String style, int partySize, int partyLevel, List<String>traits) throws JsonProcessingException {
+    public List<List<List<Monster>>> styleGenerators(StyleRequest styleRequest) throws JsonProcessingException {
 
-        Style style1 = styleGuide.get(style);
+        Style style1 = styleGuide.get(styleRequest.getStyleName());
 
         List<List<Monster>> encountersTrivial = new ArrayList<>();
         List<List<Monster>> encountersLow = new ArrayList<>();
@@ -412,7 +400,7 @@ public class styleGenerator {
             int inte = Integer.parseInt(style1.getTrivial());
 
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Trivial", partySize, partyLevel, traits);
+                List<Monster> encounterInternal = generateEncounter("Trivial", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
                 encountersTrivial.add(encounterInternal);
 
             }
@@ -421,7 +409,7 @@ public class styleGenerator {
         if(!style1.getLow().isEmpty()){
             int inte = Integer.parseInt(style1.getLow());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Low", partySize, partyLevel, traits);
+                List<Monster> encounterInternal = generateEncounter("Low", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
                 encountersLow.add(encounterInternal);
 
             }
@@ -429,7 +417,7 @@ public class styleGenerator {
         if(!style1.getModerate().isEmpty()){
             int inte = Integer.parseInt(style1.getModerate());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Moderate", partySize, partyLevel, traits);
+                List<Monster> encounterInternal = generateEncounter("Moderate", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
                 encountersModerate.add(encounterInternal);
 
             }
@@ -437,7 +425,7 @@ public class styleGenerator {
         if(!style1.getSevere().isEmpty()){
             int inte = Integer.parseInt(style1.getSevere());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Severe", partySize, partyLevel, traits);
+                List<Monster> encounterInternal = generateEncounter("Severe", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
                 encountersSevere.add(encounterInternal);
 
             }
@@ -445,51 +433,30 @@ public class styleGenerator {
         if(!style1.getExtreme().isEmpty()){
             int inte = Integer.parseInt(style1.getExtreme());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Extreme", partySize, partyLevel, traits);
+                List<Monster> encounterInternal = generateEncounter("Extreme", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
                 encountersExtreme.add(encounterInternal);
 
             }
         }
 
-        String jsonTri = objectMapper.writeValueAsString(encountersTrivial);
-        System.out.println("Trivial - "+jsonTri);
-        String jsonLow = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersLow);
-        System.out.println("Low - "+jsonLow);
-        String jsonMod = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersModerate);
-        System.out.println("Moderate - "+jsonMod);
-        String jsonSev = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersSevere);
-        System.out.println("Severe - "+jsonSev);
-        String jsonExt = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(encountersExtreme);
-        System.out.println("Extreme - "+jsonExt);
+        String attempt = "Trivial : " + encountersTrivial + " Low : " + encountersLow ;
+
+        List<List<List<Monster>>> difficultyList = new LinkedList<>();
+        difficultyList.add(encountersTrivial);
+        difficultyList.add(encountersLow);
+        difficultyList.add(encountersModerate);
+        difficultyList.add(encountersSevere);
+        difficultyList.add(encountersExtreme);
 
         ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
 
         try {
-            writer.writeValue(new File("trivial.json"),encountersTrivial);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            writer.writeValue(new File("low.json"),encountersLow);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            writer.writeValue(new File("moderate.json"),encountersModerate);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            writer.writeValue(new File("severe.json"),encountersSevere);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            writer.writeValue(new File("extreme.json"),encountersExtreme);
+            writer.writeValue(new File("Merged.json"),difficultyList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+        return difficultyList;
     }
 }
 
