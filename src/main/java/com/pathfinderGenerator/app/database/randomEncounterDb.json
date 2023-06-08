@@ -2,23 +2,29 @@
   {
     "Terrain Type": "Aquatic",
     "Flat DC": 17
-  },{
-  "Terrain Type": "Arctic",
-  "Flat DC": 17
-},{
-  "Terrain Type": "Desert",
-  "Flat DC": 17
-},{
-  "Terrain Type": "Forest",
-  "Flat DC": 14
-},{
-  "Terrain Type": "Mountain",
-  "Flat DC": 16
-},{
-  "Terrain Type": "Plains",
-  "Flat DC": 12
-},{
-  "Terrain Type": "Swamp",
-  "Flat DC": 14
-}
+  },
+  {
+    "Terrain Type": "Arctic",
+    "Flat DC": 17
+  },
+  {
+    "Terrain Type": "Desert",
+    "Flat DC": 17
+  },
+  {
+    "Terrain Type": "Forest",
+    "Flat DC": 14
+  },
+  {
+    "Terrain Type": "Mountain",
+    "Flat DC": 16
+  },
+  {
+    "Terrain Type": "Plains",
+    "Flat DC": 12
+  },
+  {
+    "Terrain Type": "Swamp",
+    "Flat DC": 14
+  }
 ]
