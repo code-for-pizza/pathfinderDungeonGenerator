@@ -19,22 +19,22 @@ public class Main {
 
 //        SpringApplication.run(Main.class, args);
 
-//        StyleRequest styleRequest = new StyleRequest();
-//        styleRequest.setStyleName("Horror");
-//        styleRequest.setPartySize(4);
-//        styleRequest.setPartyLevel(3);
-//        styleRequest.setTraits(Collections.singletonList("Undead"));
+        StyleRequest styleRequest = new StyleRequest();
+        styleRequest.setStyleName("Horror");
+        styleRequest.setPartySize(4);
+        styleRequest.setPartyLevel(3);
+//        styleRequest.setTraits(Collections.singletonList(""));
 
-//        StyleGenerator styleGenerator = new StyleGenerator();
+        StyleGenerator styleGenerator = new StyleGenerator();
 
-//        List<List<List<Monster>>> test = styleGenerator.styleGenerators(styleRequest);
+        List<List<List<Monster>>> test = styleGenerator.styleGenerators(styleRequest);
 
 
-        for (int i = 0; i < 20; i++) {
-            RandomEncounter randomEncounter = new RandomEncounter();
-            System.out.println(randomEncounter.rndEncGenerator("Swamp", 4, 3));
-
-        }
+//        for (int i = 0; i < 20; i++) {
+//            RandomEncounter randomEncounter = new RandomEncounter();
+//            System.out.println(randomEncounter.rndEncGenerator("Swamp", 4, 3));
+//
+//        }
 
     }
 }

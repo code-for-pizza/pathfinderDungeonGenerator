@@ -323,15 +323,33 @@ public class StyleGenerator {
             above. If the party level is 4, and rnd = 5, then 4 - 4 = 0 we get someone from the same level of the party.
             party level 4 we get a 2 then we generate an enemy equal to party level + (-2)
              */
-//            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel+(createXP[rnd][0])).size()));
+//            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel+(createXP[rnd][0])).size()) );
             int creatureRandom = rollDice.rollDice(monsterGuide.get(partyLevel+(createXP[rnd][0])).size());
+            System.out.println("creatureRandom = " + creatureRandom);
             /*
             We now retrieve that monster back and subtract the CRxp from our xp limit.
              */
-            Monster monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
+            Monster monster = new Monster();
+            int monsterGuideSize = monsterGuide.get(partyLevel+(createXP[rnd][0])).size();
+            if(creatureRandom == 0){
+                monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
+            }else if(creatureRandom == monsterGuideSize){
+                monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom - 1);
+            } else {
+                System.out.println(monsterGuide.get((partyLevel+(createXP[rnd][0]))).size());
+                monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
+            }
 
 
-            if(monster.getTrait().stream().anyMatch(traits::contains)){
+            if(!(traits == null)){
+                if(monster.getTrait().stream().anyMatch(traits::contains)){
+                    difficultyHold -= createXP[rnd][1];
+
+                    monster.setDifficulty(diff);
+                    finishedEncounter.add(monster);
+                    currMax = currentMax(difficultyHold);
+                }
+            } else {
                 difficultyHold -= createXP[rnd][1];
 
                 monster.setDifficulty(diff);

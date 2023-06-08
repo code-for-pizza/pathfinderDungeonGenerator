@@ -162,7 +162,7 @@ public class RandomEncounter {
                 case 8:
                 case 9:
                 case 10:
-                    System.out.println("A random encounter has occurred, generating one based on terrain" +
+                    System.out.println("A random encounter has occurred, generating one based on terrain " +
                             "if the party is flying this generator will not take that into account. RAW you would " +
                             "choose a flying creature, or a creature with some sort of reach that is able to hit them.");
                     creatureEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel);
