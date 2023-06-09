@@ -21,7 +21,7 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
     public List<List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level) throws JsonProcessingException {
-            System.out.println("style = " + style);
+//            System.out.println("style = " + style);
             StyleRequest styleRequest1 = new StyleRequest();
 
             styleRequest1.setStyleName(style);

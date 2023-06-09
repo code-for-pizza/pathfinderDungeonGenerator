@@ -324,7 +324,7 @@ public class StyleGenerator {
              */
 //            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel+(createXP[rnd][0])).size()) );
             int creatureRandom = rollDice.rollDice(monsterGuide.get(partyLevel+(createXP[rnd][0])).size());
-            System.out.println("creatureRandom = " + creatureRandom);
+//            System.out.println("creatureRandom = " + creatureRandom);
             /*
             We now retrieve that monster back and subtract the CRxp from our xp limit.
              */
@@ -335,7 +335,7 @@ public class StyleGenerator {
             }else if(creatureRandom == monsterGuideSize){
                 monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom - 1);
             } else {
-                System.out.println(monsterGuide.get((partyLevel+(createXP[rnd][0]))).size());
+//                System.out.println(monsterGuide.get((partyLevel+(createXP[rnd][0]))).size());
                 monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
             }
 
@@ -395,7 +395,7 @@ public class StyleGenerator {
         List<List<Monster>> encountersExtreme = new ArrayList<>();
 
         if(!style1.getTrivial().isEmpty()){
-            System.out.println(style1.getTrivial());
+//            System.out.println(style1.getTrivial());
             int inte = Integer.parseInt(style1.getTrivial());
 
             for(int i = 0; i < inte; i++){
@@ -447,13 +447,13 @@ public class StyleGenerator {
         difficultyList.add(encountersSevere);
         difficultyList.add(encountersExtreme);
 
-        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
-
-        try {
-            writer.writeValue(new File("Merged.json"),difficultyList);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
+//
+//        try {
+//            writer.writeValue(new File("Merged.json"),difficultyList);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         return difficultyList;
     }

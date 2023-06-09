@@ -139,7 +139,7 @@ public class RandomEncounter {
         //Roll the Dice roll
         int rnd = rollDice.rollDice(20);
         if(rnd >= 21){
-            System.out.println("rnd = " + rnd);
+//            System.out.println("rnd = " + rnd);
             rnd = rnd%20;
         }
 
@@ -152,19 +152,19 @@ public class RandomEncounter {
                 case 3:
                 case 4:
                 case 5:
-                    System.out.println("A harmless encounter has occurred.");
+//                    System.out.println("A harmless encounter has occurred.");
                     break;
                 case 6:
                 case 7:
-                    System.out.println("A hazard has occurred, this could be like a cliff, or toxic mushrooms / " +
-                            "corrupted land, and is not combat based. ");
+//                    System.out.println("A hazard has occurred, this could be like a cliff, or toxic mushrooms / " +
+//                            "corrupted land, and is not combat based. ");
                     break;
                 case 8:
                 case 9:
                 case 10:
-                    System.out.println("A random encounter has occurred, generating one based on terrain " +
-                            "if the party is flying this generator will not take that into account. RAW you would " +
-                            "choose a flying creature, or a creature with some sort of reach that is able to hit them.");
+//                    System.out.println("A random encounter has occurred, generating one based on terrain " +
+//                            "if the party is flying this generator will not take that into account. RAW you would " +
+//                            "choose a flying creature, or a creature with some sort of reach that is able to hit them.");
                     creatureEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel);
                     break;
 
