@@ -11,7 +11,6 @@ import com.pathfinderGenerator.app.object.StyleRequest;
 
 import java.io.*;
 import java.util.*;
-
 public class StyleGenerator {
 
     static ObjectMapper objectMapper = new ObjectMapper();

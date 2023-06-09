@@ -17,17 +17,17 @@ public class Main {
 
     public static void main(String[] args) throws JsonProcessingException {
 
-//        SpringApplication.run(Main.class, args);
+        SpringApplication.run(Main.class, args);
 
-        StyleRequest styleRequest = new StyleRequest();
-        styleRequest.setStyleName("Horror");
-        styleRequest.setPartySize(4);
-        styleRequest.setPartyLevel(3);
+//        StyleRequest styleRequest = new StyleRequest();
+//        styleRequest.setStyleName("Horror");
+//        styleRequest.setPartySize(4);
+//        styleRequest.setPartyLevel(3);
 //        styleRequest.setTraits(Collections.singletonList(""));
 
-        StyleGenerator styleGenerator = new StyleGenerator();
+//        StyleGenerator styleGenerator = new StyleGenerator();
 
-        List<List<List<Monster>>> test = styleGenerator.styleGenerators(styleRequest);
+//        List<List<List<Monster>>> test = styleGenerator.styleGenerators(styleRequest);
 
 
 //        for (int i = 0; i < 20; i++) {

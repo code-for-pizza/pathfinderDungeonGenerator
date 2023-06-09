@@ -15,12 +15,19 @@ import java.util.List;
 @RequestMapping("/api/")
 public class UserController {
 
-    @Autowired
-    StyleGenerator styleGenerator;
+//    @Autowired
+    StyleGenerator styleGenerator = new StyleGenerator();
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
-    public List<List<List<Monster>>> runGenerator(@RequestBody StyleRequest styleRequest) throws JsonProcessingException {
-        return styleGenerator.styleGenerators(styleRequest);
+    public List<List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level) throws JsonProcessingException {
+            System.out.println("style = " + style);
+            StyleRequest styleRequest1 = new StyleRequest();
+
+            styleRequest1.setStyleName(style);
+            styleRequest1.setPartyLevel(level);
+            styleRequest1.setPartySize(partySize);
+        return styleGenerator.styleGenerators(styleRequest1);
     }
 
 }
