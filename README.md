@@ -9,6 +9,6 @@ the traits you are looking for in an enemy (Animal, Humanoid, etc.)
 
 
 How to start the application
-1. Ensure you have java and npm installed.
+1. Ensure you have mvn and npm installed.
 2. In your Terminal run `npm start --prefix fontend-app`
-3. Then run your java backend.
+3. Then, in your Terminal run `mvn spring-boot:run` 
