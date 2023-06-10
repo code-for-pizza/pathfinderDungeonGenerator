@@ -14,7 +14,7 @@ import java.util.*;
 public class StyleGenerator {
 
     static ObjectMapper objectMapper = new ObjectMapper();
-    private RollDice rollDice = new RollDice();
+    private final RollDice rollDice = new RollDice();
     static Map<Integer, List<Monster>> monsterGuide = new StyleGenerator().instance();
     static Map<String, Style> styleGuide = new StyleGenerator().instance2();
     static String[][] xpChart = {{"Trivial", "40","10"}, {"Low", "60", "15"}, {"Moderate","80","20"}, {"Severe", "120","30"}, {"Extreme","160","40"}};
@@ -142,7 +142,6 @@ public class StyleGenerator {
                 while(jsonParser.nextToken() != JsonToken.END_ARRAY){
                     //read the monster token and do something with it
                     Monster monster1 = readMonsters(jsonParser);
-//                    System.out.println(monster1.getCr().intValue());
 
                     switch (monster1.getCr().intValue()) {
                         case -1 -> cr0.add(monster1);
@@ -322,9 +321,7 @@ public class StyleGenerator {
             above. If the party level is 4, and rnd = 5, then 4 - 4 = 0 we get someone from the same level of the party.
             party level 4 we get a 2 then we generate an enemy equal to party level + (-2)
              */
-//            int creatureRandom = (int) (Math.random() * (monsterGuide.get(partyLevel+(createXP[rnd][0])).size()) );
             int creatureRandom = rollDice.rollDice(monsterGuide.get(partyLevel+(createXP[rnd][0])).size());
-//            System.out.println("creatureRandom = " + creatureRandom);
             /*
             We now retrieve that monster back and subtract the CRxp from our xp limit.
              */
@@ -335,7 +332,6 @@ public class StyleGenerator {
             }else if(creatureRandom == monsterGuideSize){
                 monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom - 1);
             } else {
-//                System.out.println(monsterGuide.get((partyLevel+(createXP[rnd][0]))).size());
                 monster = monsterGuide.get(partyLevel+(createXP[rnd][0])).get(creatureRandom);
             }
 
@@ -395,7 +391,6 @@ public class StyleGenerator {
         List<List<Monster>> encountersExtreme = new ArrayList<>();
 
         if(!style1.getTrivial().isEmpty()){
-//            System.out.println(style1.getTrivial());
             int inte = Integer.parseInt(style1.getTrivial());
 
             for(int i = 0; i < inte; i++){
@@ -438,22 +433,12 @@ public class StyleGenerator {
             }
         }
 
-        String attempt = "Trivial : " + encountersTrivial + " Low : " + encountersLow ;
-
         List<List<List<Monster>>> difficultyList = new LinkedList<>();
         difficultyList.add(encountersTrivial);
         difficultyList.add(encountersLow);
         difficultyList.add(encountersModerate);
         difficultyList.add(encountersSevere);
         difficultyList.add(encountersExtreme);
-
-//        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
-//
-//        try {
-//            writer.writeValue(new File("Merged.json"),difficultyList);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
 
         return difficultyList;
     }
