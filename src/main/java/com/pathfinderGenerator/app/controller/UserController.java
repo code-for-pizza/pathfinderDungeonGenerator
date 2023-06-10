@@ -6,6 +6,7 @@ import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.StyleRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.testng.annotations.Optional;
 
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,13 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
-    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level) throws JsonProcessingException {
-//            System.out.println("style = " + style);
+    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam @Optional List<String> traits) throws JsonProcessingException {
             StyleRequest styleRequest1 = new StyleRequest();
 
             styleRequest1.setStyleName(style);
             styleRequest1.setPartyLevel(level);
             styleRequest1.setPartySize(partySize);
+            styleRequest1.setTraits(traits);
         return styleGenerator.styleGenerators(styleRequest1);
     }
 

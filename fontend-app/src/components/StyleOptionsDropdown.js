@@ -64,7 +64,7 @@ function StyleOptionsDropdown(){
                                 </Col>
                             </Row>
                         </Col>
-                        <Form.Label column md="1"> <p> Encounters</p> </Form.Label>
+                        <Form.Label column md="1" className="ms-2"> Encounters </Form.Label>
                         <Col md>
                             <Tabs
                               defaultActiveKey="profile"
@@ -78,13 +78,13 @@ function StyleOptionsDropdown(){
                                     <TabContent encounters={low}/>
                                 </Tab>
                                 <Tab eventKey="Moderate" title="Moderate">
-                                    <Form.Control id="moderate" as="textarea" rows={3} readOnly/>
+                                    <TabContent encounters={moderate} />
                                 </Tab>
                                 <Tab eventKey="Severe" title="Severe">
-                                    <Form.Control id="severe" as="textarea" rows={3} readOnly/>
+                                    <TabContent encounters={severe} />
                                 </Tab>
                                 <Tab eventKey="Extreme" title="Extreme">
-                                    <Form.Control id="extreme" as="textarea" rows={3} readOnly/>
+                                    <TabContent encounter={extreme} />
                                 </Tab>
                             </Tabs>
                         </Col>

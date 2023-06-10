@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card} from 'react-bootstrap';
+import {Card, Accordion} from 'react-bootstrap';
 
 function TabContent({encounters}) {
     if (!encounters) return [];
@@ -9,7 +9,7 @@ function TabContent({encounters}) {
 
          const creatureCards = encounter.map(creature => {
             return (
-                <Card key={JSON.stringify(creature)}>
+                <Card key={JSON.stringify(creature)} className='mb-2'>
                     <Card.Body>
                         <Card.Title>Creature Name: {creature.name}</Card.Title>
                         <Card.Text>
@@ -23,14 +23,14 @@ function TabContent({encounters}) {
         })
 
         return(
-            <Card key={JSON.stringify(encounter)}>
-                <Card.Body>
-                    <Card.Title> Encounter Number : {idx+1} </Card.Title>
-                    <Card.Text>
+            <Accordion key={JSON.stringify(encounter)}>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header> Encounter Number : {idx+1} </Accordion.Header>
+                    <Accordion.Body>
                         {creatureCards}
-                    </Card.Text>
-                </Card.Body>
-            </Card>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
 
         )
 
