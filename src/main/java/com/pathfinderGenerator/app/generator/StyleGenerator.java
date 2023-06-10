@@ -1,10 +1,8 @@
 package com.pathfinderGenerator.app.generator;
 
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.Style;
 import com.pathfinderGenerator.app.object.StyleRequest;
@@ -380,7 +378,7 @@ public class StyleGenerator {
         return currMax;
     }
 
-    public List<List<List<Monster>>> styleGenerators(StyleRequest styleRequest) throws JsonProcessingException {
+    public Map<String, List<List<Monster>>> styleGenerators(StyleRequest styleRequest) throws JsonProcessingException {
 
         Style style1 = styleGuide.get(styleRequest.getStyleName());
 
@@ -433,14 +431,14 @@ public class StyleGenerator {
             }
         }
 
-        List<List<List<Monster>>> difficultyList = new LinkedList<>();
-        difficultyList.add(encountersTrivial);
-        difficultyList.add(encountersLow);
-        difficultyList.add(encountersModerate);
-        difficultyList.add(encountersSevere);
-        difficultyList.add(encountersExtreme);
+        Map<String, List<List<Monster>>> difficultyMap = new HashMap<>();
+        difficultyMap.put("Trivial", encountersTrivial);
+        difficultyMap.put("Low", encountersLow);
+        difficultyMap.put("Moderate", encountersModerate);
+        difficultyMap.put("Severe", encountersSevere);
+        difficultyMap.put("Extreme", encountersExtreme);
 
-        return difficultyList;
+        return difficultyMap;
     }
 }
 

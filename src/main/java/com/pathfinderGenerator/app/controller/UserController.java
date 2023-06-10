@@ -5,10 +5,10 @@ import com.pathfinderGenerator.app.generator.StyleGenerator;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.StyleRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,7 +20,7 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
-    public List<List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level) throws JsonProcessingException {
+    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level) throws JsonProcessingException {
 //            System.out.println("style = " + style);
             StyleRequest styleRequest1 = new StyleRequest();
 

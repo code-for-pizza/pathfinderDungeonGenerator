@@ -1,25 +1,31 @@
 import React from 'react';
 import {useState} from 'react';
 import {Form,Row,Col,Card, Button,Tabs,Tab} from 'react-bootstrap';
+import TabContent from './TabContent.js'
 
 function StyleOptionsDropdown(){
 
     const [set, setSetter] = useState('')
     const [partySize, setPartySize] = useState('')
     const [level, setLevel] = useState('')
+    const [elements, setElements] = React.useState([]);
+    const [trivial, setTrivial] = useState('');
+    const [low, setLow] = useState('');
+    const [moderate, setModerate] = useState('');
+    const [severe, setSevere] = useState('');
+    const [extreme, setExtreme] = useState('');
+
     async function changed(e){
         e.preventDefault();
         await fetch(`http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`)
         .then(res => res.json())
         .then((result) => {
-            console.log(result)
-            var temp = Object.values(result)
-            console.log(temp);
-            document.getElementById('trivial').value = JSON.stringify(temp[0], null, 4);
-            document.getElementById('low').value = JSON.stringify(temp[1], null, 4);
-            document.getElementById('moderate').value = JSON.stringify(temp[2], null, 4);
-            document.getElementById('severe').value = JSON.stringify(temp[3], null, 4);
-            document.getElementById('extreme').value = JSON.stringify(temp[4], null, 4);
+            setTrivial(result.Trivial);
+            console.log(result.Trivial);
+            setLow(result.Low);
+            setModerate(result.Moderate);
+            setSevere(result.Severe);
+            setExtreme(result.Extreme);
         })
         }
 
@@ -33,10 +39,10 @@ function StyleOptionsDropdown(){
             <Card.Body>
                 <Form method="post" onSubmit={changed}>
                     <Form.Group as={Row} className="g-2">
-                        <Form.Label column md="1"> <p> Select a Style </p> </Form.Label>
+                        <Form.Label column md="1"> Select a Style </Form.Label>
                         <Col md="2">
                             <Row>
-                            <Form.Select name="selectedStyle" Aria-label="Default select example" onChange={e => setSetter(e.target.value)}>
+                            <Form.Select name="selectedStyle" onChange={e => setSetter(e.target.value)}>
                                 <option>Style Selection</option>
                                 <option value ="Dungeon Crawl">Dungeon Crawl</option>
                                 <option value ="Gritty Adventure">Gritty Adventure</option>
@@ -66,10 +72,10 @@ function StyleOptionsDropdown(){
                               className="mb-3"
                             >
                                 <Tab eventKey="Trivial" title="Trivial">
-                                    <Form.Control id="trivial" as="textarea" rows={3} readOnly/>
+                                    <TabContent encounters={trivial} />
                                 </Tab>
                                 <Tab eventKey="Low" title="Low">
-                                    <Form.Control id="low" as="textarea" rows={3} readOnly/>
+                                    <TabContent encounters={low}/>
                                 </Tab>
                                 <Tab eventKey="Moderate" title="Moderate">
                                     <Form.Control id="moderate" as="textarea" rows={3} readOnly/>
@@ -80,8 +86,6 @@ function StyleOptionsDropdown(){
                                 <Tab eventKey="Extreme" title="Extreme">
                                     <Form.Control id="extreme" as="textarea" rows={3} readOnly/>
                                 </Tab>
-
-
                             </Tabs>
                         </Col>
                     </Form.Group>
