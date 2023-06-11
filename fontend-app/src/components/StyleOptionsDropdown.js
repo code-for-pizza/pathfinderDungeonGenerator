@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState} from 'react';
-import {Form,Row,Col,Card, Button,Tabs,Tab} from 'react-bootstrap';
+import {Form,Row,Col,Card, Button,Tabs,Tab,InputGroup} from 'react-bootstrap';
 import TabContent from './TabContent.js'
 
 function StyleOptionsDropdown(){
@@ -14,20 +14,33 @@ function StyleOptionsDropdown(){
     const [moderate, setModerate] = useState('');
     const [severe, setSevere] = useState('');
     const [extreme, setExtreme] = useState('');
+    const [tempTrait, setTempTrait] = React.useState('');
+    const [traits, setTraits] = React.useState([]);
 
     async function changed(e){
         e.preventDefault();
-        await fetch(`http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`)
+        await fetch(`http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}&traits=${traits}`)
         .then(res => res.json())
         .then((result) => {
-            setTrivial(result.Trivial);
-            console.log(result.Trivial);
-            setLow(result.Low);
-            setModerate(result.Moderate);
-            setSevere(result.Severe);
-            setExtreme(result.Extreme);
-        })
+                setTrivial(result.Trivial);
+                setLow(result.Low);
+                setModerate(result.Moderate);
+                setSevere(result.Severe);
+                setExtreme(result.Extreme);
+            })
         }
+
+    async function newTrait(e){
+        e.preventDefault();
+
+        if(!tempTrait.length == 0){
+        let x = tempTrait;
+        x = x.toLowerCase();
+        x = x.charAt(0).toUpperCase() + x.slice(1);
+//        traits.push(x);
+        setTraits([...traits, x]);
+        }
+    }
 
 
 
@@ -39,7 +52,6 @@ function StyleOptionsDropdown(){
             <Card.Body>
                 <Form method="post" onSubmit={changed}>
                     <Form.Group as={Row} className="g-2">
-                        <Form.Label column md="1"> Select a Style </Form.Label>
                         <Col md="2">
                             <Row>
                             <Form.Select name="selectedStyle" onChange={e => setSetter(e.target.value)}>
@@ -63,14 +75,25 @@ function StyleOptionsDropdown(){
                                     <Form.Control size="sm" type="number" placeholder="Level" onChange={e => setLevel(e.target.value)} />
                                 </Col>
                             </Row>
+                            <Row>
+                                <InputGroup className="mb-3">
+                                    <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon1"
+                                     onClick={e => newTrait(e)}> Add Trait </Button>
+                                    <Form.Control size="sm" className="mb-3" onChange={e=> setTempTrait(e.target.value)}
+                                    wrap="hard"
+                                    />
+                                </InputGroup>
+                            </Row>
+                            <Button variant="primary" size="md"  active type="submit"> Submit </Button>
+                        </Col>
+                        <Col md="1" className="ms-2">
+                            List of Active traits.
+                            <Form.Control size="sm" as="textarea" rows={3} value={traits} readOnly />
                         </Col>
                         <Form.Label column md="1" className="ms-2"> Encounters </Form.Label>
                         <Col md>
                             <Tabs
-                              defaultActiveKey="profile"
-                              id="uncontrolled-tab-example"
-                              className="mb-3"
-                            >
+                              defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
                                 <Tab eventKey="Trivial" title="Trivial">
                                     <TabContent encounters={trivial} />
                                 </Tab>
@@ -89,9 +112,6 @@ function StyleOptionsDropdown(){
                             </Tabs>
                         </Col>
                     </Form.Group>
-                    <Button variant="primary" size="md" active type="submit">
-                        Submit
-                    </Button>
                 </Form>
             </Card.Body>
         </Card>

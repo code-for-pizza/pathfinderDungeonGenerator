@@ -16,18 +16,18 @@ import java.util.Map;
 @RequestMapping("/api/")
 public class UserController {
 
-//    @Autowired
+    //    @Autowired
     StyleGenerator styleGenerator = new StyleGenerator();
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
-    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam @Optional List<String> traits) throws JsonProcessingException {
-            StyleRequest styleRequest1 = new StyleRequest();
+    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> traits) throws JsonProcessingException {
+        StyleRequest styleRequest1 = new StyleRequest();
 
-            styleRequest1.setStyleName(style);
-            styleRequest1.setPartyLevel(level);
-            styleRequest1.setPartySize(partySize);
-            styleRequest1.setTraits(traits);
+        styleRequest1.setStyleName(style);
+        styleRequest1.setPartyLevel(level);
+        styleRequest1.setPartySize(partySize);
+        styleRequest1.setTraits(traits);
         return styleGenerator.styleGenerators(styleRequest1);
     }
 
