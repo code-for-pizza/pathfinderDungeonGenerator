@@ -23,21 +23,22 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
-    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> traits) throws JsonProcessingException {
+    public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> traits, @RequestParam(required = false) List<String> source) throws JsonProcessingException {
         StyleRequest styleRequest1 = new StyleRequest();
 
         styleRequest1.setStyleName(style);
         styleRequest1.setPartyLevel(level);
         styleRequest1.setPartySize(partySize);
         styleRequest1.setTraits(traits);
+        styleRequest1.setSource(source);
         return styleGenerator.styleGenerators(styleRequest1);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
-    public List<Monster> randomizer(@RequestParam String environment, int partySize, int level){
+    public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList){
         RandomEncounter randomEncounter = new RandomEncounter();
-        return randomEncounter.rndEncGenerator(environment, partySize, level);
+        return randomEncounter.rndEncGenerator(environment, partySize, level, sourceList);
     }
 
 }

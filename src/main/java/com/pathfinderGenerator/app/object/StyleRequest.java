@@ -15,12 +15,12 @@ import java.util.List;
 public class StyleRequest {
     @Override
     public String toString() {
-
         return "StyleRequest{" +
                 "styleName='" + styleName + '\'' +
                 ", partySize=" + partySize +
                 ", partyLevel=" + partyLevel +
                 ", traits=" + traits +
+                ", source=" + source +
                 '}';
     }
 
@@ -31,6 +31,8 @@ public class StyleRequest {
     private int partyLevel;
 
     private List<String> traits;
+
+    private List<String> source;
 
 
 

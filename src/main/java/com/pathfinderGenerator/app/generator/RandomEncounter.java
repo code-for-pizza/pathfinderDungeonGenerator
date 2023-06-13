@@ -69,7 +69,7 @@ public class RandomEncounter {
         return randomEncounterObj;
     }
 
-    private List<Monster> creatureRandomEncounter(RandomEncounterObj randomEncounterObj, int partySize, int partyLevel){
+    private List<Monster> creatureRandomEncounter(RandomEncounterObj randomEncounterObj, int partySize, int partyLevel, List<String> sourceList){
 
         //first lets sorta determine what creature type you might face
         List<String> traitList = new ArrayList<>();
@@ -126,12 +126,12 @@ public class RandomEncounter {
 
 
         StyleGenerator styleGenerator = new StyleGenerator();
-        return styleGenerator.generateEncounter("Moderate",partySize, partyLevel, traitList);
+        return styleGenerator.generateEncounter("Moderate",partySize, partyLevel, traitList,sourceList );
 
 
     }
 
-    public List<Monster> rndEncGenerator(String randomEncounterObj, int partySize, int partyLevel){
+    public List<Monster> rndEncGenerator(String randomEncounterObj, int partySize, int partyLevel, List<String> sourceList){
 
         List<Monster> creatureEncounter = new LinkedList<>();
         RandomEncounterObj randomEncounterObj1 = rndEnc.get(randomEncounterObj);
@@ -165,7 +165,7 @@ public class RandomEncounter {
 //                    System.out.println("A random encounter has occurred, generating one based on terrain " +
 //                            "if the party is flying this generator will not take that into account. RAW you would " +
 //                            "choose a flying creature, or a creature with some sort of reach that is able to hit them.");
-                    creatureEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel);
+                    creatureEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
                     break;
 
             }
