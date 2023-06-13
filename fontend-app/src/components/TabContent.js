@@ -16,6 +16,8 @@ function TabContent({encounters}) {
                             Creature Rating : {creature['Creature Level']}
                             <br/>
                             Creature Traits : [{creature.Trait.join(", ")}]
+                            <br/>
+                            Source Book : [{creature.source}]
                         </Card.Text>
                     </Card.Body>
                 </Card>

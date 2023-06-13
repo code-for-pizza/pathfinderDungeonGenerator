@@ -16,10 +16,21 @@ function StyleOptionsDropdown(){
     const [extreme, setExtreme] = useState('');
     const [tempTrait, setTempTrait] = React.useState('');
     const [traits, setTraits] = React.useState([]);
+    const [newSource, setNewSource] = React.useState('');
+    const [source, setSource] = React.useState([]);
 
     async function changed(e){
         e.preventDefault();
-        await fetch(`http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}&traits=${traits}`)
+        let url = `http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
+        console.log(url);
+        if(traits.length > 0){
+            url = url + `&traits=${traits}`;
+        }
+        if(source.length > 0){
+            url = url + `&source=${source}`;
+        }
+//        await fetch(`http://localhost:8080/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}&traits=${traits}&source=${source}`)
+        await fetch(url)
         .then(res => res.json())
         .then((result) => {
                 setTrivial(result.Trivial);
@@ -34,11 +45,20 @@ function StyleOptionsDropdown(){
         e.preventDefault();
 
         if(!tempTrait.length == 0){
-        let x = tempTrait;
-        x = x.toLowerCase();
-        x = x.charAt(0).toUpperCase() + x.slice(1);
-//        traits.push(x);
-        setTraits([...traits, x]);
+            let x = tempTrait;
+            x = x.toLowerCase();
+            x = x.charAt(0).toUpperCase() + x.slice(1);
+            setTraits([...traits, x]);
+        }
+    }
+    async function newSources(e){
+        e.preventDefault();
+
+        if(!newSource.length == 0){
+            let x = newSource;
+            x = x.toLowerCase();
+            x = x.charAt(0).toUpperCase() + x.slice(1);
+            setSource([...source, x]);
         }
     }
 
@@ -84,11 +104,24 @@ function StyleOptionsDropdown(){
                                     />
                                 </InputGroup>
                             </Row>
+                            <Row>
+                                <InputGroup className="mb-3">
+                                    <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon1"
+                                     onClick={e => newSources(e)}> Add Book Source </Button>
+                                    <Form.Control size="sm" className="mb-3" onChange={e=> setNewSource(e.target.value)}
+                                    wrap="hard"
+                                    />
+                                </InputGroup>
+                            </Row>
                             <Button variant="primary" size="md"  active type="submit"> Submit </Button>
                         </Col>
                         <Col md="1" className="ms-2">
                             List of Active traits.
                             <Form.Control size="sm" as="textarea" rows={3} value={traits} readOnly />
+                        <Row>
+                            List of Active Sources
+                            <Form.Control size="sm" as="textarea" rows={3} value={source} readOnly />
+                        </Row>
                         </Col>
                         <Form.Label column md="1" className="ms-2"> Encounters </Form.Label>
                         <Col md>

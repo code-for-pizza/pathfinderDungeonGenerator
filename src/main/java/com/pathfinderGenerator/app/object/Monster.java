@@ -21,6 +21,8 @@ public class Monster {
                 "name='" + name + '\'' +
                 ", cr=" + cr +
                 ", trait=" + trait +
+                ", difficulty='" + difficulty + '\'' +
+                ", source='" + source + '\'' +
                 '}';
     }
 
@@ -34,5 +36,7 @@ public class Monster {
     private List<String> trait;
 
     private String difficulty;
+
+    private String source;
 
 }

@@ -85,6 +85,8 @@ public class StyleGenerator {
                     if(jsonParser.getValueAsString().isEmpty()) break;
                     traitList.add(jsonParser.getValueAsString());
                     break;
+                case "Source":
+                    monster.setSource(jsonParser.getValueAsString());
             }
 
         }
@@ -245,7 +247,7 @@ public class StyleGenerator {
 
     }
 
-    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits){
+    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits, List<String> sourceList){
 
         int difficultyXpMax = 0;
         int temp = 0;
@@ -338,14 +340,33 @@ public class StyleGenerator {
                 monster = monsterGuide.get(adjustedCR).get(creatureRandom);
             }
 
+            if((!(traits == null)) || (!(sourceList==null))){
+                if(!(traits == null) && !(sourceList==null)){
+                    if((monster.getTrait().stream().anyMatch(traits::contains))&&sourceList.stream().anyMatch(monster.getSource()::equalsIgnoreCase)){
+                        difficultyHold -= createXP[rnd][1];
 
-            if(!(traits == null)){
-                if(monster.getTrait().stream().anyMatch(traits::contains)){
-                    difficultyHold -= createXP[rnd][1];
+                        monster.setDifficulty(diff);
+                        finishedEncounter.add(monster);
+                        currMax = currentMax(difficultyHold);
+                    }
+                }
+                else if(!(traits == null)){
+                    if(monster.getTrait().stream().anyMatch(traits::contains)){
+                        difficultyHold -= createXP[rnd][1];
 
-                    monster.setDifficulty(diff);
-                    finishedEncounter.add(monster);
-                    currMax = currentMax(difficultyHold);
+                        monster.setDifficulty(diff);
+                        finishedEncounter.add(monster);
+                        currMax = currentMax(difficultyHold);
+                    }
+                }
+                else if(!(sourceList == null)){
+                    if(sourceList.stream().anyMatch(monster.getSource()::equalsIgnoreCase)){
+                        difficultyHold -= createXP[rnd][1];
+
+                        monster.setDifficulty(diff);
+                        finishedEncounter.add(monster);
+                        currMax = currentMax(difficultyHold);
+                    }
                 }
             } else {
                 difficultyHold -= createXP[rnd][1];
@@ -397,7 +418,7 @@ public class StyleGenerator {
             int inte = Integer.parseInt(style1.getTrivial());
 
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Trivial", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
+                List<Monster> encounterInternal = generateEncounter("Trivial", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits(), styleRequest.getSource());
                 encountersTrivial.add(encounterInternal);
 
             }
@@ -406,7 +427,7 @@ public class StyleGenerator {
         if(!style1.getLow().isEmpty()){
             int inte = Integer.parseInt(style1.getLow());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Low", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
+                List<Monster> encounterInternal = generateEncounter("Low", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits(), styleRequest.getSource());
                 encountersLow.add(encounterInternal);
 
             }
@@ -414,7 +435,7 @@ public class StyleGenerator {
         if(!style1.getModerate().isEmpty()){
             int inte = Integer.parseInt(style1.getModerate());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Moderate", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
+                List<Monster> encounterInternal = generateEncounter("Moderate", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits(), styleRequest.getSource());
                 encountersModerate.add(encounterInternal);
 
             }
@@ -422,7 +443,7 @@ public class StyleGenerator {
         if(!style1.getSevere().isEmpty()){
             int inte = Integer.parseInt(style1.getSevere());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Severe", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
+                List<Monster> encounterInternal = generateEncounter("Severe", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits(), styleRequest.getSource());
                 encountersSevere.add(encounterInternal);
 
             }
@@ -430,7 +451,7 @@ public class StyleGenerator {
         if(!style1.getExtreme().isEmpty()){
             int inte = Integer.parseInt(style1.getExtreme());
             for(int i = 0; i < inte; i++){
-                List<Monster> encounterInternal = generateEncounter("Extreme", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits());
+                List<Monster> encounterInternal = generateEncounter("Extreme", styleRequest.getPartySize(), styleRequest.getPartyLevel(), styleRequest.getTraits(), styleRequest.getSource());
                 encountersExtreme.add(encounterInternal);
 
             }
