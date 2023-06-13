@@ -1,8 +1,10 @@
 package com.pathfinderGenerator.app.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pathfinderGenerator.app.generator.RandomEncounter;
 import com.pathfinderGenerator.app.generator.StyleGenerator;
 import com.pathfinderGenerator.app.object.Monster;
+import com.pathfinderGenerator.app.object.RandomEncounterObj;
 import com.pathfinderGenerator.app.object.StyleRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,13 @@ public class UserController {
         styleRequest1.setPartySize(partySize);
         styleRequest1.setTraits(traits);
         return styleGenerator.styleGenerators(styleRequest1);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
+    public List<Monster> randomizer(@RequestParam String environment, int partySize, int level){
+        RandomEncounter randomEncounter = new RandomEncounter();
+        return randomEncounter.rndEncGenerator(environment, partySize, level);
     }
 
 }
