@@ -171,6 +171,8 @@ public class RandomEncounter {
             }
         }
 
+        System.out.println("creatureEncounter = " + creatureEncounter);
+
         return creatureEncounter;
 
     }

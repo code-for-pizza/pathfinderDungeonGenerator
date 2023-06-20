@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      author: Bryan J
+      id: 1
+  - include:
+      file: db/changelog/v01/DDL/createTable.sql
+  - include:
+      file: db/changelog/v01/DML/insertMonsterDb.sql

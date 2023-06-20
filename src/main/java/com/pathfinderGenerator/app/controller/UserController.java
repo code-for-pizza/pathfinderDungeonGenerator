@@ -15,13 +15,14 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/")
 public class UserController {
 
     //    @Autowired
     StyleGenerator styleGenerator = new StyleGenerator();
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://75.46.130.114:30000")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
     public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> traits, @RequestParam(required = false) List<String> source) throws JsonProcessingException {
         StyleRequest styleRequest1 = new StyleRequest();
@@ -34,7 +35,7 @@ public class UserController {
         return styleGenerator.styleGenerators(styleRequest1);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://http://75.46.130.114:30000")
     @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
     public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList){
         RandomEncounter randomEncounter = new RandomEncounter();
