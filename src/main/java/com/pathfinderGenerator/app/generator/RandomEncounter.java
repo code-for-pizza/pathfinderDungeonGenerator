@@ -135,7 +135,7 @@ public class RandomEncounter {
     }
 
     private static Map<String, String> makeHarmlessDesc(){
-        Map<String, String> descMap = null;
+        Map<String,String> descMap = new HashMap<>();
         descMap.put("Aquatic", "seafood, coral, pearls, shipwrecks");
         descMap.put("Arctic", "scarce food (broken ice floes that allow for fishing, breeding grounds for seals or whales)");
         descMap.put("Desert", "water sources (underground springs, oases, and streams), mineral wealth");
@@ -171,7 +171,7 @@ public class RandomEncounter {
                     Monster encounter = new Monster();
                     encounter.setEncType("Harmless");
                     encounter.setHarmlessDescription(harmlessEncDesc.get(randomEncounterObj1.getTerrain()));
-                    userEncounter = (List<Monster>) encounter;
+                    userEncounter = Collections.singletonList(encounter);
                     break;
                 case 6:
                 case 7:
