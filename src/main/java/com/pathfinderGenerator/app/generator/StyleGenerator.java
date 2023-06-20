@@ -8,16 +8,18 @@ import com.pathfinderGenerator.app.object.Style;
 import com.pathfinderGenerator.app.object.StyleRequest;
 
 import java.io.*;
+import java.nio.file.ProviderNotFoundException;
+import java.sql.*;
 import java.util.*;
 public class StyleGenerator {
 
     static ObjectMapper objectMapper = new ObjectMapper();
     private final RollDice rollDice = new RollDice();
-    static Map<Integer, List<Monster>> monsterGuide = new StyleGenerator().instance();
+    static Map<Integer, List<Monster>> monsterGuide;
     static Map<String, Style> styleGuide = new StyleGenerator().instance2();
     static String[][] xpChart = {{"Trivial", "40","10"}, {"Low", "60", "15"}, {"Moderate","80","20"}, {"Severe", "120","30"}, {"Extreme","160","40"}};
-
     static int[][] createXP = {{-4,10}, {-3,15}, {-2,20}, {-1,30}, {0,40}, {1,60}, {2,80}, {3,120}, {4,160}};
+
     private Style readStyle(JsonParser jsonParser) throws IOException {
         Style style = new Style();
         List<String> traitList = new ArrayList<>();
@@ -55,55 +57,23 @@ public class StyleGenerator {
 
         return style;
     }
-    private Monster readMonsters(JsonParser jsonParser) throws IOException {
+    private Monster readMonsters(ResultSet jsonParser) throws IOException, SQLException {
         Monster monster = new Monster();
         List<String> traitList = new ArrayList<>();
 
-        while(jsonParser.nextToken() != JsonToken.END_OBJECT){
-            String Property = jsonParser.getCurrentName();
-
-            jsonParser.nextToken();
-
-            //Figure out what to do with these properties
-
-            switch (Property) {
-                case "name":
-                    monster.setName(jsonParser.getValueAsString());
-                    break;
-                case "Creature Level":
-                    monster.setCr(jsonParser.getIntValue());
-                    break;
-                case "Trait 1":
-                    traitList.add(jsonParser.getValueAsString());
-                    break;
-                case "Trait 2":
-                case "Trait 3":
-                case "Trait 4":
-                case "Trait 5":
-                case "Trait 6":
-                case "Trait 7":
-                    if(jsonParser.getValueAsString().isEmpty()) break;
-                    traitList.add(jsonParser.getValueAsString());
-                    break;
-                case "Source":
-                    monster.setSource(jsonParser.getValueAsString());
-            }
-
-        }
-        monster.setTrait(traitList);
+        monster.setName(jsonParser.getString("name"));
+        monster.setCr(Integer.valueOf(jsonParser.getString("cr")));
+        monster.setSource(jsonParser.getString("sources"));
+        monster.setTrait(List.of(jsonParser.getString("traits").split(",")));
 
         return monster;
     }
-    private Map<Integer,List<Monster>> instance(){
+    private Map<Integer,List<Monster>> instance(ResultSet rs){
         try{
-            File file = new File ("src/main/java/com/pathfinderGenerator/app/database/monsterDB.json");
-            JsonFactory jsonFactory = new JsonFactory();
-
             Map<Integer, List<Monster>> monsters = new HashMap<>();
             Map<String, Monster> monsterMap = new HashMap<>();
 
-            InputStream inputStream = new FileInputStream(file);
-            try(JsonParser jsonParser = jsonFactory.createParser(inputStream)){
+
                 // Create a list for 26 CR's
                 List<Monster> cr0 = new ArrayList<>();
                 List<Monster> cr1 = new ArrayList<>();
@@ -133,15 +103,10 @@ public class StyleGenerator {
                 List<Monster> cr25 = new ArrayList<>();
                 List<Monster> cr26 = new ArrayList<>();
 
-                //ensure first token is an array start
-                if(jsonParser.nextToken() != JsonToken.START_ARRAY){
-                    throw new IllegalStateException("Expected content to be an array");
-                }
-
                 //iterate through the entire document
-                while(jsonParser.nextToken() != JsonToken.END_ARRAY){
+                while(rs.next()){
                     //read the monster token and do something with it
-                    Monster monster1 = readMonsters(jsonParser);
+                    Monster monster1 = readMonsters(rs);
 
                     switch (monster1.getCr().intValue()) {
                         case -1 -> cr0.add(monster1);
@@ -201,10 +166,11 @@ public class StyleGenerator {
                 monsters.put(23 , cr24);
                 monsters.put(24 , cr25);
                 monsters.put(25 , cr26);
-            }
 
             return monsters;
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -306,8 +272,9 @@ public class StyleGenerator {
         //this will determine the max difficulty for the max XP we are dealing with.
         currMax = currentMax(difficultyXpMax);
         int difficultyHold = difficultyXpMax;
+        /*Edge case, they look up a trait or a source that /does not exist/ we will run around 400 attempts, if those 400 come up as non-existant then just throw an error.*/
+        int randomAttempt = 0;
         while(difficultyHold > 0){
-
 
             /*
             Okay we now have the absolute max we can roll for our set difficulty, which in this case is currMax
@@ -315,11 +282,14 @@ public class StyleGenerator {
             until we are either just under the exp allowed, or until we are at 0
              */
 
-                int rnd = rollDice.rollDice(currMax);
+            int rnd = rollDice.rollDice(currMax);
             int adjustedCR = partyLevel+(createXP[rnd][0]);
             if(adjustedCR< -1){
                 //this will cause an out of bounds error, adjust it to at least cr-1
                 adjustedCR = -1;
+            }
+            if(randomAttempt >= 4056){
+                adjustedCR=(randomAttempt%26)-1;
             }
             /*
             We are going to generate a random monster from depending on the partylevel and the numebr generated by rnd
@@ -332,43 +302,19 @@ public class StyleGenerator {
              */
             Monster monster = new Monster();
             int monsterGuideSize = monsterGuide.get(adjustedCR).size();
-            if(creatureRandom == 0){
-                monster = monsterGuide.get(adjustedCR).get(creatureRandom);
-            }else if(creatureRandom == monsterGuideSize){
-                monster = monsterGuide.get(adjustedCR).get(creatureRandom - 1);
-            } else {
-                monster = monsterGuide.get(adjustedCR).get(creatureRandom);
+            if(monsterGuideSize != 0){
+                if(creatureRandom == 0){
+                    monster = monsterGuide.get(adjustedCR).get(creatureRandom);
+                }else if(creatureRandom == monsterGuideSize){
+                    monster = monsterGuide.get(adjustedCR).get(creatureRandom - 1);
+                } else {
+                    monster = monsterGuide.get(adjustedCR).get(creatureRandom);
+                }
+            } else{
+                randomAttempt++;
             }
 
-            if((!(traits == null)) || (!(sourceList==null))){
-                if(!(traits == null) && !(sourceList==null)){
-                    if((monster.getTrait().stream().anyMatch(traits::contains))&&sourceList.stream().anyMatch(monster.getSource()::equalsIgnoreCase)){
-                        difficultyHold -= createXP[rnd][1];
-
-                        monster.setDifficulty(diff);
-                        finishedEncounter.add(monster);
-                        currMax = currentMax(difficultyHold);
-                    }
-                }
-                else if(!(traits == null)){
-                    if(monster.getTrait().stream().anyMatch(traits::contains)){
-                        difficultyHold -= createXP[rnd][1];
-
-                        monster.setDifficulty(diff);
-                        finishedEncounter.add(monster);
-                        currMax = currentMax(difficultyHold);
-                    }
-                }
-                else if(!(sourceList == null)){
-                    if(sourceList.stream().anyMatch(monster.getSource()::equalsIgnoreCase)){
-                        difficultyHold -= createXP[rnd][1];
-
-                        monster.setDifficulty(diff);
-                        finishedEncounter.add(monster);
-                        currMax = currentMax(difficultyHold);
-                    }
-                }
-            } else {
+            if(monster.getName() != null){
                 difficultyHold -= createXP[rnd][1];
 
                 monster.setDifficulty(diff);
@@ -404,8 +350,61 @@ public class StyleGenerator {
         return currMax;
     }
 
+    private void createMasterList(StyleRequest styleRequest){
+        Map<Integer, List<Monster>> masterList = new HashMap<>();
+        //Let us try to connect to our database
+        try{
+            String driver = "org.h2.Driver";
+            String url = "jdbc:h2:mem:creatures";
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(url,"sa","");
+
+            //first lets create a generic select all query
+            String query = "SELECT * FROM CREATURES \r\n";
+            //lets query
+            boolean triggered = false;
+            if(!(styleRequest.getTraits() == null)){
+                //we have a trait we are looking for!
+                query += "WHERE \r\n";
+                for (int i = 0; i < styleRequest.getTraits().size(); i++) {
+                    if(i == 0){
+                        query+= "traits ILIKE '%" + styleRequest.getTraits().get(i) +"%'\r\n";
+                        triggered = true;
+                    }else {
+                        query+= "OR traits ILIKE '%"+styleRequest.getTraits().get(i)+"%'\r\n";
+                    }
+                }
+            }
+            if(!(styleRequest.getSource() == null)){
+                if(!query.contains("WHERE")){
+                    query += "WHERE \r\n";
+                }
+                for (int i = 0; i < styleRequest.getSource().size(); i++) {
+                    if(i == 0 && triggered){
+                        query+= "AND (sources ILIKE '%" + styleRequest.getSource().get(i) +"%'\r\n";
+                    } else if (i == 0) {
+                        query+= "sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                    } else {
+                        query+= "OR sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                    }
+                }
+                if(query.contains("(")){
+                    query+=")";
+                }
+            }
+            System.out.println("*********** query = " + query);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            monsterGuide = instance(rs);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public Map<String, List<List<Monster>>> styleGenerators(StyleRequest styleRequest) throws JsonProcessingException {
 
+
+
+        createMasterList(styleRequest);
         Style style1 = styleGuide.get(styleRequest.getStyleName());
 
         List<List<Monster>> encountersTrivial = new ArrayList<>();
@@ -468,5 +467,3 @@ public class StyleGenerator {
         return difficultyMap;
     }
 }
-
-
