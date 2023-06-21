@@ -35,7 +35,7 @@ public class UserController {
         return styleGenerator.styleGenerators(styleRequest1);
     }
 
-    @CrossOrigin(origins = "http://http://75.46.130.114:30000")
+    @CrossOrigin(origins = "http://75.46.130.114:30000")
     @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
     public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList){
         RandomEncounter randomEncounter = new RandomEncounter();

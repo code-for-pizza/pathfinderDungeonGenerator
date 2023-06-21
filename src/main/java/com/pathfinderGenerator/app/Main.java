@@ -14,9 +14,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-//        SpringApplication.run(Main.class, args);
-        RandomEncounter randomEncounter = new RandomEncounter();
-        List<String> testList = new ArrayList<>();
-        randomEncounter.rndEncGenerator("Aquatic", 4, 3, testList);
+        SpringApplication.run(Main.class, args);
+//        RandomEncounter randomEncounter = new RandomEncounter();
+//        List<String> testList = new ArrayList<>();
+//        randomEncounter.rndEncGenerator("Aquatic", 4, 3, testList);
     }
 }
