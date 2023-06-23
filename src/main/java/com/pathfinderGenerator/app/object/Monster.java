@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -47,6 +49,33 @@ public class Monster {
 
     @Column(name = "sources")
     private String source;
+
+    @Column(name = "hp")
+    private int hp;
+
+    @Column(name = "ac")
+    private int ac;
+
+    @Column(name = "abilityScore")
+    private Map<String, Integer> abilityScore;
+
+    @Column(name = "savingThrows")
+    private Map<String, Integer> savingThrows;
+
+    @Column(name = "skills")
+    private Map<String, Integer> skills;
+
+    @Column(name = "immunities")
+    private List<String> immunities;
+
+    @Column(name = "resistance")
+    private List<String> resistance;
+
+    @Column(name = "speed")
+    private String speed;
+
+    @Column(name="actions")
+    private Map<String, String> actions;
 
     private String difficulty;
 
