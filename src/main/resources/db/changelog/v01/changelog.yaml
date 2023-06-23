@@ -5,4 +5,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/v01/DDL/createTable.sql
   - include:
-      file: db/changelog/v01/DML/insertMonsterDb.sql
+      file: db/changelog/v01/DML/insertMonsterDb2.sql
