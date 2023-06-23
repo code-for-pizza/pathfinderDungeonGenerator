@@ -3,6 +3,7 @@ package com.pathfinderGenerator.app.generator;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Splitter;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.Style;
 import com.pathfinderGenerator.app.object.StyleRequest;
@@ -11,6 +12,9 @@ import java.io.*;
 import java.nio.file.ProviderNotFoundException;
 import java.sql.*;
 import java.util.*;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
+
 public class StyleGenerator {
 
     static ObjectMapper objectMapper = new ObjectMapper();
@@ -59,12 +63,21 @@ public class StyleGenerator {
     }
     private Monster readMonsters(ResultSet jsonParser) throws IOException, SQLException {
         Monster monster = new Monster();
-        List<String> traitList = new ArrayList<>();
 
         monster.setName(jsonParser.getString("name"));
         monster.setCr(Integer.valueOf(jsonParser.getString("cr")));
         monster.setSource(jsonParser.getString("sources"));
         monster.setTrait(List.of(jsonParser.getString("traits").split(",")));
+        monster.setHp(jsonParser.getInt("hp"));
+        monster.setAc(jsonParser.getInt("ac"));
+        monster.setAbilityScore( Splitter.on(",").withKeyValueSeparator(":").split(jsonParser.getString("abilityScore")) );
+        monster.setSavingThrows(Splitter.on(",").withKeyValueSeparator(":").split(jsonParser.getString("savingThrows")) );
+        monster.setSkills(Splitter.on(",").withKeyValueSeparator(":").split(jsonParser.getString("skills")));
+        monster.setImmunities(List.of(jsonParser.getString("immunities").split(",")));
+        monster.setResistance(List.of(jsonParser.getString("resistance").split(",")));
+        monster.setSpeed(jsonParser.getString("speed"));
+//        monster.setActions(Splitter.on("\",\"").withKeyValueSeparator(":").split(jsonParser.getString("actions")));
+
 
         return monster;
     }
@@ -108,7 +121,7 @@ public class StyleGenerator {
                     //read the monster token and do something with it
                     Monster monster1 = readMonsters(rs);
 
-                    switch (monster1.getCr().intValue()) {
+                    switch (monster1.getCr()) {
                         case -1 -> cr0.add(monster1);
                         case 0 -> cr1.add(monster1);
                         case 1 -> cr2.add(monster1);
@@ -354,10 +367,6 @@ public class StyleGenerator {
         Map<Integer, List<Monster>> masterList = new HashMap<>();
         //Let us try to connect to our database
         try{
-            String driver = "org.h2.Driver";
-            String url = "jdbc:h2:mem:creatures";
-            Class.forName(driver);
-            Connection conn = DriverManager.getConnection(url,"sa","");
 
             //first lets create a generic select all query
             String query = "SELECT * FROM CREATURES \r\n";
@@ -392,9 +401,7 @@ public class StyleGenerator {
                     query+=")";
                 }
             }
-            System.out.println("*********** query = " + query);
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = queryDatabase(query);
             monsterGuide = instance(rs);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -465,5 +472,27 @@ public class StyleGenerator {
 
         System.out.println("difficultyMap = " + difficultyMap);
         return difficultyMap;
+    }
+
+    public void createMonsterQuery(String name) throws SQLException, ClassNotFoundException, IOException {
+        String query = "SELECT * FROM CREATURES WHERE NAME='"+name.toUpperCase()+"'";
+
+        ResultSet rs = queryDatabase(query);
+        rs.next();
+        Monster temp = readMonsters(rs);
+        System.out.println("rs = " + temp);
+//        return rs;
+    }
+
+    private ResultSet queryDatabase(String sqlString) throws ClassNotFoundException, SQLException {
+        System.out.println("*********** query = " + sqlString);
+        String driver = "org.h2.Driver";
+        String url = "jdbc:h2:mem:creatures";
+        Class.forName(driver);
+        Connection conn = DriverManager.getConnection(url,"sa","");
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sqlString);
+
+        return rs;
     }
 }

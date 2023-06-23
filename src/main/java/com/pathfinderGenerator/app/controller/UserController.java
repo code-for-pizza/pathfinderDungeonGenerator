@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.testng.annotations.Optional;
 
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +43,13 @@ public class UserController {
     public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList){
         RandomEncounter randomEncounter = new RandomEncounter();
         return randomEncounter.rndEncGenerator(environment, partySize, level, sourceList);
+    }
+
+    @CrossOrigin(origins = "http://75.46.130.114:30000")
+    @RequestMapping(value="/getMonster", method = RequestMethod.GET)
+    public void getMonster(@RequestParam String monsterName) throws SQLException, ClassNotFoundException, IOException {
+        StyleGenerator sty = new StyleGenerator();
+        sty.createMonsterQuery(monsterName);
     }
 
 }

@@ -26,8 +26,17 @@ public class Monster {
                 "name='" + name + '\'' +
                 ", cr=" + cr +
                 ", trait=" + trait +
-                ", difficulty='" + difficulty + '\'' +
                 ", source='" + source + '\'' +
+                ", hp=" + hp +
+                ", ac=" + ac +
+                ", abilityScore=" + abilityScore +
+                ", savingThrows=" + savingThrows +
+                ", skills=" + skills +
+                ", immunities=" + immunities +
+                ", resistance=" + resistance +
+                ", speed='" + speed + '\'' +
+                ", actions=" + actions +
+                ", difficulty='" + difficulty + '\'' +
                 '}';
     }
 
@@ -57,13 +66,13 @@ public class Monster {
     private int ac;
 
     @Column(name = "abilityScore")
-    private Map<String, Integer> abilityScore;
+    private Map<String, String> abilityScore;
 
     @Column(name = "savingThrows")
-    private Map<String, Integer> savingThrows;
+    private Map<String, String> savingThrows;
 
     @Column(name = "skills")
-    private Map<String, Integer> skills;
+    private Map<String, String> skills;
 
     @Column(name = "immunities")
     private List<String> immunities;

@@ -83,9 +83,9 @@ public class Extractor {
     private Monster readMonsters(JsonParser jsonParser) throws IOException {
         Monster monster = new Monster();
         List<String> traitList = new ArrayList<>();
-        Map<String, Integer> MAP_LIST = new HashMap<>();
-        Map<String, Integer> ST_LIST = new HashMap<>();
-        Map<String, Integer> SK_LIST = new HashMap<>();
+        Map<String, String> MAP_LIST = new HashMap<>();
+        Map<String, String> ST_LIST = new HashMap<>();
+        Map<String, String> SK_LIST = new HashMap<>();
         List<String> IMMUNITIES_LIST = new ArrayList<>();
         List<String> RESISTANCE_LIST = new ArrayList<>();
         Map<String, String> ACT_LIST = new HashMap<>();
@@ -106,6 +106,7 @@ public class Extractor {
                     break;
                 case "AC":
                     monster.setAc(jsonParser.getIntValue());
+                    break;
                 case "Creature Level":
                     monster.setCr(jsonParser.getIntValue());
                     break;
@@ -130,12 +131,12 @@ public class Extractor {
                 case "Wisdom":
                 case "Charisma":
                 case "Strength":
-                    MAP_LIST.put(Property,jsonParser.getIntValue());
+                    MAP_LIST.put(Property,jsonParser.getValueAsString());
                     break;
                 case "Fort":
                 case "Ref":
                 case "Will":
-                    ST_LIST.put(Property, jsonParser.getIntValue());
+                    ST_LIST.put(Property, jsonParser.getValueAsString());
                     break;
                 case "Acrobatics":
                 case "Arcana":
@@ -153,9 +154,9 @@ public class Extractor {
                 case "Stealth":
                 case "Survival":
                 case "Thievery":
-                    if(jsonParser.getValueAsString() == null){SK_LIST.put(Property, 0); break;}
-                    SK_LIST.put(Property, jsonParser.getIntValue());
-
+                    if(jsonParser.getValueAsString() == null){SK_LIST.put(Property, "0"); break;}
+                    SK_LIST.put(Property, jsonParser.getValueAsString());
+                    break;
                 case "Immunities":
                     String tempImmune = jsonParser.getValueAsString();
                     IMMUNITIES_LIST = List.of(tempImmune.split(", "));

@@ -22,7 +22,7 @@ public class Main {
 //        List<String> testList = new ArrayList<>();
 //        randomEncounter.rndEncGenerator("Aquatic", 4, 3, testList);
 
-//        Extractor extractor = new Extractor();
-//        extractor.sqlExtractor();
+        Extractor extractor = new Extractor();
+        extractor.sqlExtractor();
     }
 }

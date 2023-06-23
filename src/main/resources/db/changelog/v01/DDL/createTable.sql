@@ -12,5 +12,5 @@ CREATE TABLE creatures (
     resistance VARCHAR2(5000),
     speed VARCHAR2(5000),
     actions VARCHAR2(5000),
-    skills VARCHAR2(255)
+    skills VARCHAR2(500)
 );
