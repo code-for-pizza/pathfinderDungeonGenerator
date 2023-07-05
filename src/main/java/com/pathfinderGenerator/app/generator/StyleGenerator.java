@@ -7,11 +7,14 @@ import com.google.common.base.Splitter;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.Style;
 import com.pathfinderGenerator.app.object.StyleRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.*;
 import java.nio.file.ProviderNotFoundException;
 import java.sql.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
@@ -23,6 +26,12 @@ public class StyleGenerator {
     static Map<String, Style> styleGuide = new StyleGenerator().instance2();
     static String[][] xpChart = {{"Trivial", "40","10"}, {"Low", "60", "15"}, {"Moderate","80","20"}, {"Severe", "120","30"}, {"Extreme","160","40"}};
     static int[][] createXP = {{-4,10}, {-3,15}, {-2,20}, {-1,30}, {0,40}, {1,60}, {2,80}, {3,120}, {4,160}};
+    @Autowired
+    @Value("${spring.datasource.driverClassName}")
+    String driver;
+    @Autowired
+    @Value("${spring.datasource.url}")
+    String url;
 
     private Style readStyle(JsonParser jsonParser) throws IOException {
         Style style = new Style();
@@ -76,8 +85,23 @@ public class StyleGenerator {
         monster.setImmunities(List.of(jsonParser.getString("immunities").split(",")));
         monster.setResistance(List.of(jsonParser.getString("resistance").split(",")));
         monster.setSpeed(jsonParser.getString("speed"));
-//        monster.setActions(Splitter.on("\",\"").withKeyValueSeparator(":").split(jsonParser.getString("actions")));
-
+        List<String> tempA = new ArrayList<>();
+        Pattern stringPattern = Pattern.compile("((([Aa]ttack)|([Ss]pells))\\s[0-9]:)");
+        System.out.println(jsonParser.getString("actions"));
+        Splitter.on(stringPattern).split(jsonParser.getString("actions")).forEach(tempA::add);
+        HashMap<String, String> tempB = new HashMap<>();
+        System.out.println("tempA = " + tempA);
+        tempB.put("Spells 2", tempA.get(1));
+        tempB.put("Spells 1", tempA.get(2));
+        tempB.put("Spells 3", tempA.get(3));
+        tempB.put("Attack 6", tempA.get(4));
+        tempB.put("Attack 7", tempA.get(5));
+        tempB.put("Attack 4", tempA.get(6));
+        tempB.put("Attack 5", tempA.get(7));
+        tempB.put("Attack 2", tempA.get(8));
+        tempB.put("Attack 3", tempA.get(9));
+        tempB.put("Attack 1", tempA.get(10));
+        monster.setActions(tempB);
 
         return monster;
     }
@@ -377,12 +401,13 @@ public class StyleGenerator {
                 query += "WHERE \r\n";
                 for (int i = 0; i < styleRequest.getTraits().size(); i++) {
                     if(i == 0){
-                        query+= "traits ILIKE '%" + styleRequest.getTraits().get(i) +"%'\r\n";
+                        query+= "( traits ILIKE '%" + styleRequest.getTraits().get(i) +"%'\r\n";
                         triggered = true;
                     }else {
                         query+= "OR traits ILIKE '%"+styleRequest.getTraits().get(i)+"%'\r\n";
                     }
                 }
+                query+= ")";
             }
             if(!(styleRequest.getSource() == null)){
                 if(!query.contains("WHERE")){
@@ -474,14 +499,14 @@ public class StyleGenerator {
         return difficultyMap;
     }
 
-    public void createMonsterQuery(String name) throws SQLException, ClassNotFoundException, IOException {
+    public Monster createMonsterQuery(String name) throws SQLException, ClassNotFoundException, IOException {
         String query = "SELECT * FROM CREATURES WHERE NAME='"+name.toUpperCase()+"'";
 
         ResultSet rs = queryDatabase(query);
         rs.next();
         Monster temp = readMonsters(rs);
         System.out.println("rs = " + temp);
-//        return rs;
+        return temp;
     }
 
     private ResultSet queryDatabase(String sqlString) throws ClassNotFoundException, SQLException {

@@ -4,6 +4,7 @@ import {Card, Accordion} from 'react-bootstrap';
 function TabContent({encounters}) {
     if (!encounters) return [];
 
+console.log(encounters)
     return encounters.map((encounter,idx) => {
 
 

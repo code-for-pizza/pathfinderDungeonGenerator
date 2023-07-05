@@ -34,6 +34,7 @@ function StyleOptionsDropdown(){
         await fetch(url)
         .then(res => res.json())
         .then((result) => {
+                console.log(result);
                 setTrivial(result.Trivial);
                 setLow(result.Low);
                 setModerate(result.Moderate);
@@ -127,7 +128,7 @@ function StyleOptionsDropdown(){
                                     <TabContent encounters={severe} />
                                 </Tab>
                                 <Tab eventKey="Extreme" title="Extreme">
-                                    <TabContent encounter={extreme} />
+                                    <TabContent encounters={extreme} />
                                 </Tab>
                             </Tabs>
                         </Col>

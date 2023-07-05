@@ -53,7 +53,6 @@ public class Extractor {
                         String tempSource = monster1.getSource().replaceAll("#", "");
                         String tempName = monster1.getName().replaceAll("'", "");
                         String tempTrait = monster1.getTrait().stream().map(n -> String.valueOf(n)).collect(Collectors.joining(",", "'", "'"));
-                        String tempResistance = monster1.getResistance().stream().map(r -> String.valueOf(r)).collect(Collectors.joining(",","'","'"));
                         temp = "( '" + tempName + "' ," + monster1.getCr() + "," + tempTrait
                                 + ", '" + tempSource + "' , '" + monster1.getHp() + "', '"+ monster1.getAc() + "', '"+
                                 objectMapper.writeValueAsString(monster1.getAbilityScore()) +
