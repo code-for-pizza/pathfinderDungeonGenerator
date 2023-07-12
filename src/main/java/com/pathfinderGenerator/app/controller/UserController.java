@@ -37,7 +37,7 @@ public class UserController {
 
     @CrossOrigin(origins = "http://75.46.130.114:30000")
     @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
-    public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList){
+    public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList) throws JsonProcessingException {
         RandomEncounter randomEncounter = new RandomEncounter();
         return randomEncounter.rndEncGenerator(environment, partySize, level, sourceList);
     }

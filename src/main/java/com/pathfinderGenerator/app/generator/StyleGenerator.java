@@ -213,12 +213,16 @@ public class StyleGenerator {
 
     }
 
-    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits, List<String> sourceList){
+    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits, List<String> sourceList, StyleRequest... optionalFlag){
 
         int difficultyXpMax = 0;
         int temp = 0;
         int currMax = 0;
         List<Monster> finishedEncounter = new ArrayList<>();
+
+        if(monsterGuide == null){
+            createMasterList(optionalFlag[0]);
+        }
 
         switch (diff) {
             case "Trivial":
