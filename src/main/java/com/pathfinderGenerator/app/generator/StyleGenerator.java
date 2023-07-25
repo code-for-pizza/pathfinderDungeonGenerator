@@ -372,11 +372,14 @@ public class StyleGenerator {
                 query += "WHERE \r\n";
                 for (int i = 0; i < styleRequest.getTraits().size(); i++) {
                     if(i == 0){
-                        query+= "traits ILIKE '%" + styleRequest.getTraits().get(i) +"%'\r\n";
+                        query+= "( traits ILIKE '%" + styleRequest.getTraits().get(i) +"%'\r\n";
                         triggered = true;
                     }else {
                         query+= "OR traits ILIKE '%"+styleRequest.getTraits().get(i)+"%'\r\n";
                     }
+                }
+                if(query.contains("(")){
+                    query+=")";
                 }
             }
             if(!(styleRequest.getSource() == null)){
