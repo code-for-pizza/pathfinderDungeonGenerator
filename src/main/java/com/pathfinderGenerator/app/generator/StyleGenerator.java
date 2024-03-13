@@ -416,20 +416,22 @@ public class StyleGenerator {
                 }
             }
             if(!(styleRequest.getSource() == null)){
-                if(!query.contains("WHERE")){
-                    query += "WHERE \r\n";
-                }
-                for (int i = 0; i < styleRequest.getSource().size(); i++) {
-                    if(i == 0 && triggered){
-                        query+= "AND (sources ILIKE '%" + styleRequest.getSource().get(i) +"%'\r\n";
-                    } else if (i == 0) {
-                        query+= "sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
-                    } else {
-                        query+= "OR sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                if(!styleRequest.getStyleName().equals("All")){
+                    if(!query.contains("WHERE")){
+                        query += "WHERE \r\n";
                     }
-                }
-                if(query.contains("(")){
-                    query+=")";
+                    for (int i = 0; i < styleRequest.getSource().size(); i++) {
+                        if(i == 0 && triggered){
+                            query+= "AND (sources ILIKE '%" + styleRequest.getSource().get(i) +"%'\r\n";
+                        } else if (i == 0) {
+                            query+= "sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                        } else {
+                            query+= "OR sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                        }
+                    }
+                    if(query.contains("(")){
+                        query+=")";
+                    }
                 }
             }
             ResultSet rs = queryDatabase(query);

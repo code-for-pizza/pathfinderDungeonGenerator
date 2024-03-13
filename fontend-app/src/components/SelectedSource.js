@@ -5,6 +5,8 @@ function SelectedSource({setNewSource}) {
     return (
 
                                     <Form.Select size="sm" className="mb-3" onChange={e => setNewSource(e)}>
+                                        <option>Select Source</option>
+                                        <option value ="All">All options</option>
                                         <option value ="1-00: Origin of the Open Road">1-00: Origin of the Open Road</option>
                                         <option value ="1-01: The Absalom Initiation">1-01: The Absalom Initiation</option>
                                         <option value ="1-02: The Mosquito Witch">1-02: The Mosquito Witch</option>
