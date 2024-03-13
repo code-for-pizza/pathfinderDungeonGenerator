@@ -196,7 +196,7 @@ public class RandomEncounter {
             }
         }
 
-        System.out.println("userEncounter = " + userEncounter);
+        //System.out.println("userEncounter = " + userEncounter);
 
         return userEncounter;
 
