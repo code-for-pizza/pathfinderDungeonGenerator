@@ -23,7 +23,7 @@ function StyleOptionsDropdown(){
 
     async function changed(e){
         e.preventDefault();
-        let url = `http://75.46.130.114:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
+        let url = `http://localhost:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
         console.log(url);
         if(traits.length > 0){
             url = url + `&traits=${traits}`;
