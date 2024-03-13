@@ -127,10 +127,14 @@ public class RandomEncounter {
 
         StyleRequest styleRequest = new StyleRequest();
         styleRequest.setTraits(traitList);
+        styleRequest.setSource(sourceList);
+        styleRequest.setPartyLevel(partyLevel);
+        styleRequest.setPartySize(partySize);
+        styleRequest.setStyleName(randomEncounterObj.getTerrain());
 
 
         StyleGenerator styleGenerator = new StyleGenerator();
-        return styleGenerator.generateEncounter("Moderate",partySize, partyLevel, traitList,sourceList );
+        return styleGenerator.generateEncounter("Moderate",partySize, partyLevel, traitList,sourceList, styleRequest);
 
 
     }

@@ -250,12 +250,16 @@ public class StyleGenerator {
 
     }
 
-    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits, List<String> sourceList){
+    public List<Monster> generateEncounter(String diff, int partySize, int partyLevel, List<String> traits, List<String> sourceList, StyleRequest... optionalFlag){
 
         int difficultyXpMax = 0;
         int temp = 0;
         int currMax = 0;
         List<Monster> finishedEncounter = new ArrayList<>();
+
+        if(monsterGuide == null){
+            createMasterList(optionalFlag[0]);
+        }
 
         switch (diff) {
             case "Trivial":
@@ -407,23 +411,27 @@ public class StyleGenerator {
                         query+= "OR traits ILIKE '%"+styleRequest.getTraits().get(i)+"%'\r\n";
                     }
                 }
-                query+= ")";
-            }
-            if(!(styleRequest.getSource() == null)){
-                if(!query.contains("WHERE")){
-                    query += "WHERE \r\n";
-                }
-                for (int i = 0; i < styleRequest.getSource().size(); i++) {
-                    if(i == 0 && triggered){
-                        query+= "AND (sources ILIKE '%" + styleRequest.getSource().get(i) +"%'\r\n";
-                    } else if (i == 0) {
-                        query+= "sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
-                    } else {
-                        query+= "OR sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
-                    }
-                }
                 if(query.contains("(")){
                     query+=")";
+                }
+            }
+            if(!(styleRequest.getSource() == null)){
+                if(!styleRequest.getStyleName().equals("All")){
+                    if(!query.contains("WHERE")){
+                        query += "WHERE \r\n";
+                    }
+                    for (int i = 0; i < styleRequest.getSource().size(); i++) {
+                        if(i == 0 && triggered){
+                            query+= "AND (sources ILIKE '%" + styleRequest.getSource().get(i) +"%'\r\n";
+                        } else if (i == 0) {
+                            query+= "sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                        } else {
+                            query+= "OR sources ILIKE '%"+styleRequest.getSource().get(i)+"%'\r\n";
+                        }
+                    }
+                    if(query.contains("(")){
+                        query+=")";
+                    }
                 }
             }
             ResultSet rs = queryDatabase(query);

@@ -61,6 +61,14 @@ function StyleOptionsDropdown(){
         setSource("");
     }
 
+    async function clearMonsters(){
+        setTrivial("");
+        setLow("");
+        setModerate("");
+        setSevere("");
+        setExtreme("");
+    }
+
     async function newSources(e){
         setSource([...source, e.target.value]);
     }
@@ -101,7 +109,7 @@ function StyleOptionsDropdown(){
                                                                         onClick={e => clearSource()} > Clear </Button>
                                 </InputGroup>
                             </Row>
-                            <Button variant="primary" size="md"  active type="submit"> Submit </Button>
+                            <Button variant="primary" size="md"  active type="submit" onClick={e => clearMonsters()}> Submit </Button>
                         </Col>
                         <Col md="1" className="ms-2">
                             List of Active traits.
