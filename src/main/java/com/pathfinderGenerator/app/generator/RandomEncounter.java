@@ -100,6 +100,7 @@ public class RandomEncounter {
                 traitList.add("Leshy");
                 traitList.add("Goblin");
                 traitList.add("Orc");
+                traitList.add("Earth");
                 break;
             case "Mountain":
                 traitList.add("Earth");
