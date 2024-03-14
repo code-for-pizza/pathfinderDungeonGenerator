@@ -1,9 +1,9 @@
 import React from 'react';
 import {useState} from 'react';
 import {Form,Row,Col,Card, Button,Tabs,Tab,InputGroup} from 'react-bootstrap';
-import TabContent from './TabContent.js';
-import SelectedStyle from './SelectedStyle.js';
-import SelectedSource from './SelectedSource.js';
+import TabContent from './TabContent';
+import SelectedStyle from './SelectedStyle';
+import SelectedSource from './SelectedSource';
 
 function StyleOptionsDropdown(){
 
