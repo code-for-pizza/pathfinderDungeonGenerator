@@ -91,5 +91,5 @@ public class Monster {
     // Denotes the type of the encounter. If null it's probably a monster
     private String encType;
     // TODO: figure out type checking and subclasses and separate this class out
-    private String harmlessDescription;
+    private String encounterDescription;
 }
