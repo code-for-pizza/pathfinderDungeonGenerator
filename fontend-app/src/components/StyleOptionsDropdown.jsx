@@ -1,9 +1,9 @@
 import React from 'react';
 import {useState} from 'react';
 import {Form,Row,Col,Card, Button,Tabs,Tab,InputGroup} from 'react-bootstrap';
-import TabContent from './TabContent.js';
-import SelectedStyle from './SelectedStyle.js';
-import SelectedSource from './SelectedSource.js';
+import TabContent from './TabContent';
+import SelectedStyle from './SelectedStyle';
+import SelectedSource from './SelectedSource';
 
 function StyleOptionsDropdown(){
 
@@ -22,10 +22,12 @@ function StyleOptionsDropdown(){
     async function changed(e){
         e.preventDefault();
         let url = `http://localhost:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
+
         if(level > 20 || level < 1){
             alert("Use a viable level [1-20], you have inputted "+level);
             return;
         }
+
         console.log(url);
         if(traits.length > 0){
             url = url + `&traits=${traits}`;
