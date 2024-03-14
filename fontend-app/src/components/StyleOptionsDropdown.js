@@ -7,10 +7,9 @@ import SelectedSource from './SelectedSource.js';
 
 function StyleOptionsDropdown(){
 
-    const [set, setSetter] = useState('')
-    const [partySize, setPartySize] = useState('')
-    const [level, setLevel] = useState('')
-    const [elements, setElements] = React.useState([]);
+    const [set, setSetter] = useState('');
+    const [partySize, setPartySize] = useState('');
+    const [level, setLevel] = useState('');
     const [trivial, setTrivial] = useState('');
     const [low, setLow] = useState('');
     const [moderate, setModerate] = useState('');
@@ -18,7 +17,6 @@ function StyleOptionsDropdown(){
     const [extreme, setExtreme] = useState('');
     const [tempTrait, setTempTrait] = React.useState('');
     const [traits, setTraits] = React.useState([]);
-    const [newSource, setNewSource] = React.useState('');
     const [source, setSource] = React.useState([]);
 
     async function changed(e){
@@ -50,7 +48,7 @@ function StyleOptionsDropdown(){
     async function newTrait(e){
         e.preventDefault();
 
-        if(!tempTrait.length == 0){
+        if(!tempTrait.length === 0){
             let x = tempTrait;
             x = x.toLowerCase();
             x = x.charAt(0).toUpperCase() + x.slice(1);
