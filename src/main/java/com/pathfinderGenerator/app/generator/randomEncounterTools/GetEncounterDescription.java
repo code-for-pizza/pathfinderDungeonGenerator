@@ -1,11 +1,7 @@
 package com.pathfinderGenerator.app.generator.randomEncounterTools;
 
-import com.pathfinderGenerator.app.generator.randomEncounterTools.QuickEnvDetails;
 import com.pathfinderGenerator.app.generator.RollDice;
-import com.pathfinderGenerator.app.generator.randomEncounterTools.HazardEnvDetails;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class GetEncounterDescription {
 

@@ -2,7 +2,6 @@ import com.pathfinderGenerator.app.object.Monster;
 import org.junit.jupiter.api.DisplayName;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.junit.jupiter.api.Assertions;
 
 //testing
 import com.pathfinderGenerator.app.generator.RandomEncounter;

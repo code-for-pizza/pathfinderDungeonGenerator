@@ -144,7 +144,6 @@ public class RandomEncounter {
         List<Monster> userEncounter = new LinkedList<>();
         RandomEncounterObj randomEncounterObj1 = rndEnc.get(randomEncounterObj);
 
-        //Roll the Dice roll
         int rnd = rollDice.rollDice(20);
 
         //it has rolled higher than the static DC lets see what we get now
@@ -156,7 +155,6 @@ public class RandomEncounter {
                 case 3:
                 case 4:
                 case 5:
-                    //Harmless
                     Monster encounter = new Monster();
                     encounter.setEncType("Harmless");
                     encounter.setEncounterDescription(getEncounterDescription.getHarmlessEncounterDescription(randomEncounterObj1.getTerrain()));
@@ -164,7 +162,6 @@ public class RandomEncounter {
                     break;
                 case 6:
                 case 7:
-                    //Hazards
                     Monster encounter2 = new Monster();
                     encounter2.setEncType("hazard");
                     encounter2.setEncounterDescription(getEncounterDescription.getHazardEncounterDescription(
@@ -174,7 +171,6 @@ public class RandomEncounter {
                 case 8:
                 case 9:
                 case 10:
-                    // Combat Encounter
                     if(!sourceList.get(0).equals("Testing")){
                         userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
                     }
@@ -182,8 +178,6 @@ public class RandomEncounter {
 
             }
         }
-
-        //System.out.println("userEncounter = " + userEncounter);
 
         return userEncounter;
 
