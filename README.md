@@ -11,4 +11,6 @@ the traits you are looking for in an enemy (Animal, Humanoid, etc.)
 How to start the application
 1. Ensure you have mvn and npm installed.
 2. In your Terminal run `npm start --prefix fontend-app`
-3. Then, in your Terminal run `mvn spring-boot:run` 
+3. Then, in your Terminal run `mvn spring-boot:run`
+
+4. Swagger-ui url is by default http://localhost:30001/swagger-ui/index.html
