@@ -7,10 +7,9 @@ import SelectedSource from './SelectedSource.js';
 
 function StyleOptionsDropdown(){
 
-    const [set, setSetter] = useState('')
-    const [partySize, setPartySize] = useState('')
-    const [level, setLevel] = useState('')
-    const [elements, setElements] = React.useState([]);
+    const [set, setSetter] = useState('');
+    const [partySize, setPartySize] = useState('');
+    const [level, setLevel] = useState('');
     const [trivial, setTrivial] = useState('');
     const [low, setLow] = useState('');
     const [moderate, setModerate] = useState('');
@@ -18,12 +17,17 @@ function StyleOptionsDropdown(){
     const [extreme, setExtreme] = useState('');
     const [tempTrait, setTempTrait] = React.useState('');
     const [traits, setTraits] = React.useState([]);
-    const [newSource, setNewSource] = React.useState('');
     const [source, setSource] = React.useState([]);
 
     async function changed(e){
         e.preventDefault();
         let url = `http://localhost:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
+
+        if(level > 20 || level < 1){
+            alert("Use a viable level [1-20], you have inputted "+level);
+            return;
+        }
+
         console.log(url);
         if(traits.length > 0){
             url = url + `&traits=${traits}`;
@@ -34,7 +38,7 @@ function StyleOptionsDropdown(){
         await fetch(url)
         .then(res => res.json())
         .then((result) => {
-                console.log(result);
+                //console.log(result);
                 setTrivial(result.Trivial);
                 setLow(result.Low);
                 setModerate(result.Moderate);
@@ -46,7 +50,7 @@ function StyleOptionsDropdown(){
     async function newTrait(e){
         e.preventDefault();
 
-        if(!tempTrait.length == 0){
+        if(!tempTrait.length === 0){
             let x = tempTrait;
             x = x.toLowerCase();
             x = x.charAt(0).toUpperCase() + x.slice(1);

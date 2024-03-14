@@ -1,16 +1,20 @@
 import React from 'react';
 import {Card, Accordion} from 'react-bootstrap';
 
+function getRandomInt(max){
+    return Math.floor(Math.random() * max);
+}
+
 function TabContent({encounters}) {
     if (!encounters) return [];
 
-console.log(encounters)
+    //console.log(encounters)
     return encounters.map((encounter,idx) => {
 
 
          const creatureCards = encounter.map(creature => {
             return (
-                <Card key={JSON.stringify(creature)} className='mb-2'>
+                <Card key={JSON.stringify(creature)+getRandomInt(10000)} className='mb-2'>
                     <Card.Body>
                         <Card.Title>Creature Name: {creature.name}</Card.Title>
                         <Card.Text>
