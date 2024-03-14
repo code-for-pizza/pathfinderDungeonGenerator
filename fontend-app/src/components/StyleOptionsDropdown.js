@@ -1,11 +1,11 @@
 import React from 'react';
-import {useState} from 'react';
-import {Form,Row,Col,Card, Button,Tabs,Tab,InputGroup} from 'react-bootstrap';
+import { useState } from 'react';
+import { Form, Row, Col, Card, Button, Tabs, Tab, InputGroup } from 'react-bootstrap';
 import TabContent from './TabContent.js';
 import SelectedStyle from './SelectedStyle.js';
 import SelectedSource from './SelectedSource.js';
-
-function StyleOptionsDropdown(){
+import { monsterTraits } from './datasets.js';
+function StyleOptionsDropdown() {
 
     const [set, setSetter] = useState('');
     const [partySize, setPartySize] = useState('');
@@ -15,29 +15,30 @@ function StyleOptionsDropdown(){
     const [moderate, setModerate] = useState('');
     const [severe, setSevere] = useState('');
     const [extreme, setExtreme] = useState('');
-    const [tempTrait, setTempTrait] = useState('');
     const [traits, setTraits] = useState([]);
     const [source, setSource] = useState([]);
     const [currTrait, setCurrTrait] = useState('')
-    async function changed(e){
+
+
+    async function changed(e) {
         e.preventDefault();
         let url = `http://localhost:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
 
-        if(level > 20 || level < 1){
-            alert("Use a viable level [1-20], you have inputted "+level);
+        if (level > 20 || level < 1) {
+            alert("Use a viable level [1-20], you have inputted " + level);
             return;
         }
 
         console.log(url);
-        if(traits.length > 0){
+        if (traits.length > 0) {
             url = url + `&traits=${traits}`;
         }
-        if(source.length > 0){
+        if (source.length > 0) {
             url = url + `&source=${source}`;
         }
         await fetch(url)
-        .then(res => res.json())
-        .then((result) => {
+            .then(res => res.json())
+            .then((result) => {
                 //console.log(result);
                 setTrivial(result.Trivial);
                 setLow(result.Low);
@@ -45,27 +46,23 @@ function StyleOptionsDropdown(){
                 setSevere(result.Severe);
                 setExtreme(result.Extreme);
             })
-        }
+    }
 
-    async function newTrait(e){
+    async function newTrait(e) {
         e.preventDefault();
-
-        if(!tempTrait.length === 0){
-            let x = tempTrait;
-            x = x.toLowerCase();
-            x = x.charAt(0).toUpperCase() + x.slice(1);
-            setTraits([...traits, x]);
+        if (currTrait.length){
+            setTraits([...traits, currTrait]);
         }
     }
 
-    async function clearTraits(){
+    async function clearTraits() {
         setTraits("");
     }
-    async function clearSource(){
+    async function clearSource() {
         setSource("");
     }
 
-    async function clearMonsters(){
+    async function clearMonsters() {
         setTrivial("");
         setLow("");
         setModerate("");
@@ -73,83 +70,65 @@ function StyleOptionsDropdown(){
         setExtreme("");
     }
 
-    async function newSources(e){
+    async function newSources(e) {
         setSource([...source, e.target.value]);
     }
 
-    return(
-        <Card>
-            <Card.Header> Generate 3-4 sessions of a campaign using a pre-defined style.</Card.Header>
-            <Card.Body>
+    return (
+        <div>
+            <h3> Generate 3-4 sessions of a campaign using a pre-defined style.</h3>
+            <div>
                 <Form method="post" onSubmit={changed}>
-                    <Form.Group as={Row} className="g-2">
-                        <Col md="2">
-                            <Row>
-                                <SelectedStyle setSetter={setSetter}/>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <Form.Control size="sm" type="number" placeholder="Party Size" onChange={e => setPartySize(e.target.value)} />
-                                </Col>
-                                <Col>
-                                    <Form.Control size="sm" type="number" placeholder="Level" onChange={e => setLevel(e.target.value)} />
-                                </Col>
-                            </Row>
-
-
-
-
-
-
-
-
-                            <Row>
-                                <InputGroup className="mb-3">
+                        <div md="2">
+                            <div className='style-selection-form'>
+                                <SelectedStyle setSetter={setSetter} />
+                            </div>
+                            <div>
+                                <div className='party-size-input-wrapper'>
+                                    <input size="sm" type="number" placeholder="Party Size" onChange={e => setPartySize(e.target.value)} />
+                                </div>
+                                <div className='level-input-wrapper'>
+                                    <input size="sm" type="number" placeholder="Level" onChange={e => setLevel(e.target.value)} />
+                                </div>
+                            </div>
+                            <div>
+                                <div className="select-traits-wrapper-div">
+                                    <select size="sm" className="mb-3" onChange={e => setCurrTrait(e.target.value)}>
+                                        <option value={''}>Traits</option>
+                                        {monsterTraits.map(trait => <option value={trait}>{trait}</option>)}
+                                    </select>
                                     <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon1"
-                                     onClick={e => newTrait(e)}> Add Trait </Button>
-                                    <Form.Control size="sm" className="mb-3" onChange={e=> setTempTrait(e.target.value)}
-                                    wrap="hard"
-                                    />
+                                        onClick={e => newTrait(e)}> Add Trait </Button>
                                     <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon2"
-                                    onClick={e => clearTraits()} > Clear </Button>
-                                </InputGroup>
-                            </Row>
-                            <Row>
-                                <InputGroup className="mb-3">
+                                        onClick={e => clearTraits()} > Clear </Button>
+                                </div>
+                            </div>
+
+                                <div className="select-sources-wrapper-div">
                                     <SelectedSource setNewSource={newSources} />
                                     <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon2"
-                                                                        onClick={e => clearSource()} > Clear </Button>
-                                </InputGroup>
-                            </Row>
+                                        onClick={e => clearSource()} > Clear </Button>
+                                </div>
 
-
-
-
-
-
-
-
-
-                            
-                            <Button variant="primary" size="md"  active type="submit" onClick={e => clearMonsters()}> Submit </Button>
-                        </Col>
-                        <Col md="1" className="ms-2">
+                            <Button variant="primary" size="md" active type="submit" onClick={e => clearMonsters()}> Submit </Button>
+                        </div>
+                        <div md="1" className="ms-2">
                             List of Active traits.
-                            <Form.Control size="sm" as="textarea" rows={3} value={traits} readOnly />
-                        <Row>
-                            List of Active Sources
-                            <Form.Control size="sm" as="textarea" rows={3} value={source} readOnly />
-                        </Row>
-                        </Col>
-                        <Form.Label column md="1" className="ms-2"> Encounters </Form.Label>
-                        <Col md>
+                            <textarea size="sm" as="textarea" rows={3} value={traits} readOnly />
+                            <div>
+                                List of Active Sources
+                                <textarea size="sm" as="textarea" rows={3} value={source} readOnly />
+                            </div>
+                        </div>
+                        <label column md="1" className="ms-2"> Encounters </label>
+                        <div className='encounter-tabs-wrapper-div'>
                             <Tabs
-                              defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
+                                defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
                                 <Tab eventKey="Trivial" title="Trivial">
                                     <TabContent encounters={trivial} />
                                 </Tab>
                                 <Tab eventKey="Low" title="Low">
-                                    <TabContent encounters={low}/>
+                                    <TabContent encounters={low} />
                                 </Tab>
                                 <Tab eventKey="Moderate" title="Moderate">
                                     <TabContent encounters={moderate} />
@@ -161,11 +140,10 @@ function StyleOptionsDropdown(){
                                     <TabContent encounters={extreme} />
                                 </Tab>
                             </Tabs>
-                        </Col>
-                    </Form.Group>
+                        </div>
                 </Form>
-            </Card.Body>
-        </Card>
+            </div>
+        </div>
     )
 }
 export default StyleOptionsDropdown;

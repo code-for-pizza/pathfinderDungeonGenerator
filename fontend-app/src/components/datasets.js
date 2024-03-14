@@ -103,7 +103,7 @@ export const style = [
     "Romantic Adventure"
 ]
 
-export const traits = [
+export const monsterTraits = [
     "aeon", "aesir", "agathion", "air", "alchemical", "amphibious", "anadi", "angel", "anugobu", "aquatic",
     "arcane", "archon", "asura", "azata", "boggard", "caligni", "catfolk", "changeling", "charau-ka",
     "clockwork", "cold", "couatl", "daemon", "darvakka", "demon", "dero", "devil", "dhampir", "dinosaur", "div",
