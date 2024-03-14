@@ -25,7 +25,7 @@ public class UserController {
     //    @Autowired
     StyleGenerator styleGenerator = new StyleGenerator();
 
-    @CrossOrigin(origins = "http://75.46.130.114:30002")
+    @CrossOrigin(origins = "http://localhost:30002")
     @RequestMapping(value ="/styleGenerator", method = RequestMethod.GET)
     public Map<String, List<List<Monster>>> runGenerator(@RequestParam String style, @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> traits, @RequestParam(required = false) List<String> source) throws JsonProcessingException {
         StyleRequest styleRequest1 = new StyleRequest();
@@ -38,14 +38,14 @@ public class UserController {
         return styleGenerator.styleGenerators(styleRequest1);
     }
 
-    @CrossOrigin(origins = "http://75.46.130.114:30002")
+    @CrossOrigin(origins = "http://localhost:30002")
     @RequestMapping(value="/randomGenerator", method = RequestMethod.GET)
     public List<Monster> randomizer(@RequestParam String environment,  @RequestParam int partySize, @RequestParam int level, @RequestParam(required = false) List<String> sourceList) throws JsonProcessingException {
         RandomEncounter randomEncounter = new RandomEncounter();
         return randomEncounter.rndEncGenerator(environment, partySize, level, sourceList);
     }
 
-    @CrossOrigin(origins = "http://75.46.130.114:30002")
+    @CrossOrigin(origins = "http://localhost:30002")
     @RequestMapping(value="/getMonster", method = RequestMethod.GET)
     public Monster getMonster(@RequestParam String monsterName) throws SQLException, ClassNotFoundException, IOException {
         StyleGenerator sty = new StyleGenerator();
