@@ -15,10 +15,10 @@ function StyleOptionsDropdown(){
     const [moderate, setModerate] = useState('');
     const [severe, setSevere] = useState('');
     const [extreme, setExtreme] = useState('');
-    const [tempTrait, setTempTrait] = React.useState('');
-    const [traits, setTraits] = React.useState([]);
-    const [source, setSource] = React.useState([]);
-
+    const [tempTrait, setTempTrait] = useState('');
+    const [traits, setTraits] = useState([]);
+    const [source, setSource] = useState([]);
+    const [currTrait, setCurrTrait] = useState('')
     async function changed(e){
         e.preventDefault();
         let url = `http://localhost:30001/api/styleGenerator?style=${set}&partySize=${partySize}&level=${level}`;
@@ -95,6 +95,14 @@ function StyleOptionsDropdown(){
                                     <Form.Control size="sm" type="number" placeholder="Level" onChange={e => setLevel(e.target.value)} />
                                 </Col>
                             </Row>
+
+
+
+
+
+
+
+
                             <Row>
                                 <InputGroup className="mb-3">
                                     <Button size="sm" className="mb-3" variant="outline-secondary" id="button-addon1"
@@ -113,6 +121,16 @@ function StyleOptionsDropdown(){
                                                                         onClick={e => clearSource()} > Clear </Button>
                                 </InputGroup>
                             </Row>
+
+
+
+
+
+
+
+
+
+                            
                             <Button variant="primary" size="md"  active type="submit" onClick={e => clearMonsters()}> Submit </Button>
                         </Col>
                         <Col md="1" className="ms-2">

@@ -102,3 +102,16 @@ export const style = [
     "Planar Adventure",
     "Romantic Adventure"
 ]
+
+export const traits = [
+    "aeon", "aesir", "agathion", "air", "alchemical", "amphibious", "anadi", "angel", "anugobu", "aquatic",
+    "arcane", "archon", "asura", "azata", "boggard", "caligni", "catfolk", "changeling", "charau-ka",
+    "clockwork", "cold", "couatl", "daemon", "darvakka", "demon", "dero", "devil", "dhampir", "dinosaur", "div",
+    "drow", "duergar", "duskwalker", "earth", "electricity", "fetchling", "fire", "formian", "genie", "ghoran",
+    "ghost", "ghoul", "ghul", "gnoll", "golem", "goblin", "gremlin", "grioth", "grippli", "hag", "hantu", "herald",
+    "human", "ifrit", "ikeshti", "illusion", "incorporeal", "inevitable", "kaiju", "kami", "kobold", "kovintus",
+    "leshy", "lilu", "lizardfolk", "locathan", "merfolk", "mindless", "morlock", "mortic", "mummy", "munavri",
+    "mutant", "nagaji", "nymph", "oni", "orc", "oread", "paaridar", "phantom", "protean", "psychopomp", "qlippoth",
+    "rakshasa", "ratajin", "ratfolk", "sahkil", "samsaran", "sea devil", "serpentfolk", "seugathi", "shabti",
+    "shapechanger", "siktempora", "skeleton", "skelm", "skulk", "sonic"
+]
