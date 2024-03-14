@@ -7,8 +7,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.RandomEncounterObj;
 import com.pathfinderGenerator.app.object.StyleRequest;
-import com.pathfinderGenerator.app.generator.randomEncounterTools.QuickEnvDetails;
 import com.pathfinderGenerator.app.generator.randomEncounterTools.GetEncounterDescription;
+import com.pathfinderGenerator.app.generator.randomEncounterTools.LevelBasedDc;
 
 import java.io.*;
 import java.util.*;
@@ -16,13 +16,9 @@ import java.util.*;
 public class RandomEncounter {
 
     static Map<String, RandomEncounterObj> rndEnc = new RandomEncounter().instance();
-
     private RollDice rollDice = new RollDice();
-
-    private QuickEnvDetails quickEnvDetails = new QuickEnvDetails();
-
+    private LevelBasedDc levelBasedDc = new LevelBasedDc();
     private GetEncounterDescription getEncounterDescription = new GetEncounterDescription();
-
     private Map<String, RandomEncounterObj> instance(){
         try{
             File file = new File("src/main/java/com/pathfinderGenerator/app/database/randomEncounterDb.json");
@@ -150,16 +146,10 @@ public class RandomEncounter {
 
         //Roll the Dice roll
         int rnd = rollDice.rollDice(20);
-        if(rnd >= 21){
 
-            rnd = rnd%20;
-        }
-        System.out.println("rnd = " + rnd);
         //it has rolled higher than the static DC lets see what we get now
         if(rnd > randomEncounterObj1.getDc()) {
             int rndHazard = rollDice.rollDice(10);
-            System.out.println("rnd hazard = " + rndHazard);
-            String sense = "";
             switch (rndHazard+1) {
                 case 1:
                 case 2:
@@ -177,14 +167,17 @@ public class RandomEncounter {
                     //Hazards
                     Monster encounter2 = new Monster();
                     encounter2.setEncType("hazard");
-                    encounter2.setEncounterDescription(getEncounterDescription.getHazardEncounterDescription(randomEncounterObj1.getTerrain()));
+                    encounter2.setEncounterDescription(getEncounterDescription.getHazardEncounterDescription(
+                            randomEncounterObj1.getTerrain()) + " Base DC: " + levelBasedDc.levelBasedDc(partyLevel));
                     userEncounter = Collections.singletonList(encounter2);
                     break;
                 case 8:
                 case 9:
                 case 10:
                     // Combat Encounter
-                    userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    if(!sourceList.get(0).equals("Testing")){
+                        userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    }
                     break;
 
             }

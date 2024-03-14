@@ -31,7 +31,7 @@ public class GetEncounterDescription {
             case "Aquatic":
                 description = (quickEnvDetails.aquatic().get(sense)[rollDice.rollDice(quickEnvDetails.aquatic().get(sense).length-1)]);
                 break;
-            case "Artic":
+            case "Arctic":
                 description = (quickEnvDetails.arctic().get(sense)[rollDice.rollDice(quickEnvDetails.arctic().get(sense).length-1)]);
                 break;
             case "Forest":
@@ -61,7 +61,7 @@ public class GetEncounterDescription {
             case "Aquatic":
                 description = (hazardEnvDetails.aquatic()[rnd]);
                 break;
-            case "Artic":
+            case "Arctic":
                 description = (hazardEnvDetails.arctic()[rnd]);
                 break;
             case "Forest":
