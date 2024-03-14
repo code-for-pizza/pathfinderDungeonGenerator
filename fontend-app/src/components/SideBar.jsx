@@ -36,7 +36,7 @@ function SideBar() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title> Monster Info </Modal.Title>
+          <Modal.Title>Monster Info</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Row className="mb-3">
