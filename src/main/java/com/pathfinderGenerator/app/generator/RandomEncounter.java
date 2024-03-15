@@ -144,12 +144,12 @@ public class RandomEncounter {
         List<Monster> userEncounter = new LinkedList<>();
         RandomEncounterObj randomEncounterObj1 = rndEnc.get(randomEncounterObj);
 
-        int rnd = rollDice.rollDice(20);
+        int rnd = rollDice.rollDice(20,true);
 
         //it has rolled higher than the static DC lets see what we get now
         if(rnd > randomEncounterObj1.getDc()) {
-            int rndHazard = rollDice.rollDice(10);
-            switch (rndHazard+1) {
+            int rndHazard = rollDice.rollDice(10,true);
+            switch (rndHazard) {
                 case 1:
                 case 2:
                 case 3:
@@ -175,7 +175,6 @@ public class RandomEncounter {
                         userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
                     }
                     break;
-
             }
         }
 

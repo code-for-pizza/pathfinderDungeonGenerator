@@ -12,7 +12,7 @@ public class GetEncounterDescription {
     HazardEnvDetails hazardEnvDetails = new HazardEnvDetails();
 
     public String getHarmlessEncounterDescription(String terrain){
-        int rnd = rollDice.rollDice(5);
+        int rnd = rollDice.rollDice(5,false);
         String sense = "";
         switch (rnd) {
             case 0: sense = "Sights"; break;
@@ -20,30 +20,26 @@ public class GetEncounterDescription {
             case 2: sense = "Smells"; break;
             case 3: sense = "Textures"; break;
             case 4: sense = "Weather"; break;
-            default: sense = "Sights"; break;
         }
         String description = "";
         switch(terrain){
             case "Aquatic":
-                description = (quickEnvDetails.aquatic().get(sense)[rollDice.rollDice(quickEnvDetails.aquatic().get(sense).length-1)]);
+                description = (quickEnvDetails.aquatic().get(sense)[rollDice.rollDice(quickEnvDetails.aquatic().get(sense).length,false)]);
                 break;
             case "Arctic":
-                description = (quickEnvDetails.arctic().get(sense)[rollDice.rollDice(quickEnvDetails.arctic().get(sense).length-1)]);
+                description = (quickEnvDetails.arctic().get(sense)[rollDice.rollDice(quickEnvDetails.arctic().get(sense).length,false)]);
                 break;
             case "Forest":
-                description = (quickEnvDetails.forest().get(sense)[rollDice.rollDice(quickEnvDetails.forest().get(sense).length-1)]);
+                description = (quickEnvDetails.forest().get(sense)[rollDice.rollDice(quickEnvDetails.forest().get(sense).length,false)]);
                 break;
             case "Plains":
-                 description = (quickEnvDetails.plains().get(sense)[rollDice.rollDice(quickEnvDetails.plains().get(sense).length-1)]);
+                 description = (quickEnvDetails.plains().get(sense)[rollDice.rollDice(quickEnvDetails.plains().get(sense).length,false)]);
                 break;
             case "Swamp":
-                description = (quickEnvDetails.swamp().get(sense)[rollDice.rollDice(quickEnvDetails.swamp().get(sense).length-1)]);
+                description = (quickEnvDetails.swamp().get(sense)[rollDice.rollDice(quickEnvDetails.swamp().get(sense).length,false)]);
                 break;
             case "Mountain":
-                description = (quickEnvDetails.mountain().get(sense)[rollDice.rollDice(quickEnvDetails.mountain().get(sense).length-1)]);
-                break;
-            default:
-                description = (quickEnvDetails.underground().get(sense)[rollDice.rollDice(quickEnvDetails.underground().get(sense).length-1)]);
+                description = (quickEnvDetails.mountain().get(sense)[rollDice.rollDice(quickEnvDetails.mountain().get(sense).length,false)]);
                 break;
         }
 
@@ -51,7 +47,7 @@ public class GetEncounterDescription {
     }
 
     public String getHazardEncounterDescription(String terrain){
-        int rnd = rollDice.rollDice(5);
+        int rnd = rollDice.rollDice(5,false);
         String description = "";
         switch(terrain){
             case "Aquatic":
@@ -71,9 +67,6 @@ public class GetEncounterDescription {
                 break;
             case "Mountain":
                 description = (hazardEnvDetails.mountain()[rnd]);
-                break;
-            default:
-                description = (hazardEnvDetails.plains()[rnd]);
                 break;
         }
 
