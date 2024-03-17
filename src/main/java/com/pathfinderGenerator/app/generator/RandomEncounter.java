@@ -171,7 +171,10 @@ public class RandomEncounter {
                 case 8:
                 case 9:
                 case 10:
-                    if(!sourceList.get(0).equals("Testing")){
+                    if(sourceList == null){
+                        userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    }
+                    else if(!sourceList.get(0).equals("Testing")){
                         userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
                     }
                     break;
