@@ -513,12 +513,10 @@ public class StyleGenerator {
         ResultSet rs = queryDatabase(query);
         rs.next();
         Monster temp = readMonsters(rs);
-        System.out.println("rs = " + temp);
         return temp;
     }
 
     private ResultSet queryDatabase(String sqlString) throws ClassNotFoundException, SQLException {
-//        System.out.println("*********** query = " + sqlString);
         String driver = "org.h2.Driver";
         String url = "jdbc:h2:mem:creatures";
         Class.forName(driver);
