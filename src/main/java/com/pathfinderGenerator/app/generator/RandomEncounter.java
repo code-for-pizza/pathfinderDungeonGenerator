@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.pathfinderGenerator.app.object.Monster;
 import com.pathfinderGenerator.app.object.RandomEncounterObj;
 import com.pathfinderGenerator.app.object.StyleRequest;
+import com.pathfinderGenerator.app.generator.randomEncounterTools.GetEncounterDescription;
+import com.pathfinderGenerator.app.generator.randomEncounterTools.LevelBasedDc;
 
 import java.io.*;
 import java.util.*;
@@ -15,10 +17,8 @@ public class RandomEncounter {
 
     static Map<String, RandomEncounterObj> rndEnc = new RandomEncounter().instance();
     private RollDice rollDice = new RollDice();
-
-    // generate map for harmless encounter descriptions
-    static Map<String, String> harmlessEncDesc = RandomEncounter.makeHarmlessDesc();
-
+    private LevelBasedDc levelBasedDc = new LevelBasedDc();
+    private GetEncounterDescription getEncounterDescription = new GetEncounterDescription();
     private Map<String, RandomEncounterObj> instance(){
         try{
             File file = new File("src/main/java/com/pathfinderGenerator/app/database/randomEncounterDb.json");
@@ -139,64 +139,47 @@ public class RandomEncounter {
 
     }
 
-    private static Map<String, String> makeHarmlessDesc(){
-        Map<String,String> descMap = new HashMap<>();
-        descMap.put("Aquatic", "seafood, coral, pearls, shipwrecks");
-        descMap.put("Arctic", "scarce food (broken ice floes that allow for fishing, breeding grounds for seals or whales)");
-        descMap.put("Desert", "water sources (underground springs, oases, and streams), mineral wealth");
-        descMap.put("Forest", "diverse flora and fauna, natural remedies, plentiful game");
-        descMap.put("Mountain", "minerals (including gold, silver, and gemstones)");
-        descMap.put("Plain", "useful plants (flax or cotton)");
-        descMap.put("Swamp", " materials useful for medicine or poison");
-        return descMap;
-    }
-
     public List<Monster> rndEncGenerator(String randomEncounterObj, int partySize, int partyLevel, List<String> sourceList){
 
         List<Monster> userEncounter = new LinkedList<>();
         RandomEncounterObj randomEncounterObj1 = rndEnc.get(randomEncounterObj);
 
-        //Roll the Dice roll
-        int rnd = rollDice.rollDice(20);
-        if(rnd >= 21){
-//            System.out.println("rnd = " + rnd);
-            rnd = rnd%20;
-        }
+        int rnd = rollDice.rollDice(20,true);
 
         //it has rolled higher than the static DC lets see what we get now
         if(rnd > randomEncounterObj1.getDc()) {
-            int rndHazard = rollDice.rollDice(10);
+            int rndHazard = rollDice.rollDice(10,true);
             switch (rndHazard) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
                 case 5:
-//                    harmless encounter
                     Monster encounter = new Monster();
                     encounter.setEncType("Harmless");
-                    encounter.setHarmlessDescription(harmlessEncDesc.get(randomEncounterObj1.getTerrain()));
+                    encounter.setEncounterDescription(getEncounterDescription.getHarmlessEncounterDescription(randomEncounterObj1.getTerrain()));
                     userEncounter = Collections.singletonList(encounter);
                     break;
                 case 6:
                 case 7:
-//                    hazard?
-//                    System.out.println("A hazard has occurred, this could be like a cliff, or toxic mushrooms / " +
-//                            "corrupted land, and is not combat based. ");
+                    Monster encounter2 = new Monster();
+                    encounter2.setEncType("hazard");
+                    encounter2.setEncounterDescription(getEncounterDescription.getHazardEncounterDescription(
+                            randomEncounterObj1.getTerrain()) + " Base DC: " + levelBasedDc.levelBasedDc(partyLevel));
+                    userEncounter = Collections.singletonList(encounter2);
                     break;
                 case 8:
                 case 9:
                 case 10:
-//                    System.out.println("A random encounter has occurred, generating one based on terrain " +
-//                            "if the party is flying this generator will not take that into account. RAW you would " +
-//                            "choose a flying creature, or a creature with some sort of reach that is able to hit them.");
-                    userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    if(sourceList == null){
+                        userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    }
+                    else if(!sourceList.get(0).equals("Testing")){
+                        userEncounter = creatureRandomEncounter(randomEncounterObj1, partySize, partyLevel, sourceList);
+                    }
                     break;
-
             }
         }
-
-        //System.out.println("userEncounter = " + userEncounter);
 
         return userEncounter;
 

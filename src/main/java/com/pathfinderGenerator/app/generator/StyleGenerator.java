@@ -323,7 +323,7 @@ public class StyleGenerator {
             until we are either just under the exp allowed, or until we are at 0
              */
 
-            int rnd = rollDice.rollDice(currMax);
+            int rnd = rollDice.rollDice(currMax,false);
             int adjustedCR = partyLevel+(createXP[rnd][0]);
             if(adjustedCR< -1){
                 //this will cause an out of bounds error, adjust it to at least cr-1
@@ -337,7 +337,7 @@ public class StyleGenerator {
             above. If the party level is 4, and rnd = 5, then 4 - 4 = 0 we get someone from the same level of the party.
             party level 4 we get a 2 then we generate an enemy equal to party level + (-2)
              */
-            int creatureRandom = rollDice.rollDice(monsterGuide.get(adjustedCR).size());
+            int creatureRandom = rollDice.rollDice(monsterGuide.get(adjustedCR).size(), false);
             /*
             We now retrieve that monster back and subtract the CRxp from our xp limit.
              */
@@ -513,12 +513,10 @@ public class StyleGenerator {
         ResultSet rs = queryDatabase(query);
         rs.next();
         Monster temp = readMonsters(rs);
-        System.out.println("rs = " + temp);
         return temp;
     }
 
     private ResultSet queryDatabase(String sqlString) throws ClassNotFoundException, SQLException {
-        System.out.println("*********** query = " + sqlString);
         String driver = "org.h2.Driver";
         String url = "jdbc:h2:mem:creatures";
         Class.forName(driver);

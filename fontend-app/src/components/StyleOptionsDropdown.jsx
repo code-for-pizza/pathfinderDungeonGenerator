@@ -49,8 +49,7 @@ function StyleOptionsDropdown(){
 
     async function newTrait(e){
         e.preventDefault();
-
-        if(!tempTrait.length === 0){
+        if((!tempTrait.length == 0)){
             let x = tempTrait;
             x = x.toLowerCase();
             x = x.charAt(0).toUpperCase() + x.slice(1);
